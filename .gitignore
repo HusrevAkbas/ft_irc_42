@@ -1,0 +1,5 @@
+.vscode
+irc
+objs/
+*.o
+*.d
