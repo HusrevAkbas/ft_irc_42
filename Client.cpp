@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Client.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: huakbas <huakbas@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 15:17:28 by huakbas           #+#    #+#             */
-/*   Updated: 2025/10/06 12:07:50 by huakbas          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Client.hpp"
 
 Client::Client() : _socketFd(-1) {}
@@ -30,10 +18,10 @@ void	Client::setSocketFd(int fd)
 void	Client::setNickname(std::string nick)
 {	this->_nickname = nick;	}
 
-struct epoll_event	*Client::getEvent()
+epoll_event	Client::getEvent()
 {	return (this->_event);	}
 
-void	Client::setEvent(struct epoll_event *event)
+void	Client::setEvent(struct epoll_event event)
 {	this->_event = event;	}
 
 int	Client::getConnected()

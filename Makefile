@@ -1,8 +1,8 @@
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98 -MMD -MP
+CFLAGS		=	-std=c++98 -MMD -MP# -Wall -Wextra -Werror
 
 COMPILER	=	c++
 
-SRCS		=	main.cpp Client.cpp helper.cpp
+SRCS		=	main.cpp Client.cpp helper.cpp Server.cpp Channel.cpp
 
 OBJDIR		=	objs/
 OBJS		=	$(addprefix $(OBJDIR), $(SRCS:.cpp=.o))

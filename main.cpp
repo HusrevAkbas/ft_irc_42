@@ -1,18 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: huakbas <huakbas@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/01 13:36:40 by huakbas           #+#    #+#             */
-/*   Updated: 2025/10/06 15:11:28 by huakbas          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "headers.hpp"
-#include "Client.hpp"
-#include "vector"
+#include "Server.hpp"
 
 #define	BUFFER_SIZE	1000
 
@@ -68,7 +54,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 
-	struct epoll_event	interest;
+	epoll_event	interest;
 	interest.events = EPOLLIN | EPOLLET;
 	interest.data.fd = server_socket_fd;
 
@@ -101,7 +87,7 @@ int	main(int argc, char **argv)
 			//	no receieve or send in this part
 			if (pending[i].data.fd == server_socket_fd)
 			{
-				struct sockaddr_in	socket_addr;
+				sockaddr_in	socket_addr;
 				socklen_t	socket_len = sizeof(socket_addr);
 
 				// accept connection
@@ -119,7 +105,7 @@ int	main(int argc, char **argv)
 				fcntl(client_fd, F_SETFL, O_NONBLOCK);
 
 				// set event for client to be able to add interest list
-				t_epoll_event	client_event;
+				epoll_event	client_event;
 				client_event.events = EPOLLIN | EPOLLET;
 				client_event.data.fd = client_fd;
 
