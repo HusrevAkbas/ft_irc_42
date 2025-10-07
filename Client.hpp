@@ -14,7 +14,8 @@ class Client
 		std::vector<Channel *>	_channels;
 	public:
 		Client();
-		Client(std::string nick, int socketFd);
+		Client(int fd);
+		Client(std::string nick, int socketFd, epoll_event event);
 		~Client();
 		Client(const Client &other);
 		Client&	operator=(const Client &other);

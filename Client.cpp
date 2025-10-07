@@ -2,7 +2,9 @@
 
 Client::Client() : _socketFd(-1) {}
 
-Client::Client(std::string nick, int fd) : _nickname(nick), _socketFd(fd) {}
+Client::Client(int fd) : _socketFd(fd) {}
+
+Client::Client(std::string nick, int fd, epoll_event event) : _nickname(nick), _socketFd(fd), _event(event) {}
 
 Client::~Client() {}
 

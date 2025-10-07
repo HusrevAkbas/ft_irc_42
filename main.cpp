@@ -78,7 +78,6 @@ int	main(int argc, char **argv)
 		if (event_n == -1)
 		{
 			std::cerr << "Error: epoll_wait\n";
-			// TODO clear allocated memory
 			return (1);
 		}
 		for (int i = 0; i < event_n; i++)

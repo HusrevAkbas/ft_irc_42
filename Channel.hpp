@@ -8,7 +8,7 @@ class Channel
 {
 	private:
 		std::string	_name;
-		std::vector<Client*>	_operators;
+		std::vector<Client *>	_operators;
 		std::string	_password;
 		std::string	_topic;
 		bool		_i_inviteOnly;
@@ -22,4 +22,13 @@ class Channel
 		Channel& operator=(const Channel &other);
 		//	void	_o_givePrivilege(const Client &operator, const Client *target);
 		//	void	_o_takePrivilege(const Client &operator, const Client *target);
+
+		std::string	getName() const;
+		std::string	getPass() const;
+		std::string	getTopic() const;
+		bool	getInviteStatus() const;
+		bool	getTopicStatus() const;
+		bool	getPassStatus() const;
+		int		getUserLimit() const;
+		std::vector<Client *>	getOperators() const;
 };

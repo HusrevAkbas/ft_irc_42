@@ -40,3 +40,12 @@ Classes
 		void	o_takePrivilege(&Client operator, &Client target)
 
 	Commands
+		KICK
+		INVITE
+		MODE
+		TOPIC
+
+		CAP
+		JOIN
+		PRIVMSG
+		PING
