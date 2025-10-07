@@ -16,7 +16,8 @@ class Client
 		Client();
 		Client(std::string nick, int socketFd);
 		~Client();
-		//Client&	operator=(const Client &other);
+		Client(const Client &other);
+		Client&	operator=(const Client &other);
 
 		std::string	getNickname() const;
 		void	setNickname(std::string nick);

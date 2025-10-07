@@ -18,8 +18,8 @@ class Channel
 	public:
 		Channel();
 		~Channel();
-		//	Channel(const Channel &other);
-		//	Channel& operator=(const Channel &other);
+		Channel(const Channel &other);
+		Channel& operator=(const Channel &other);
 		//	void	_o_givePrivilege(const Client &operator, const Client *target);
 		//	void	_o_takePrivilege(const Client &operator, const Client *target);
 };

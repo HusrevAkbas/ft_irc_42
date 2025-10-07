@@ -13,11 +13,11 @@ class Server
 		std::string	_password;
 		sockaddr_in	_sockaddr;
 		epoll_event	_event;
-		std::vector<Client *>	_clients;
-		std::vector<Channel *>	_channels;
+		std::vector<Client>	_clients;
+		std::vector<Channel>	_channels;
 	public:
 		Server();
 		~Server();
-		// Server(const Server &other);
-		// Server&	operator=(const Server &other);
+		Server(const Server &other);
+		Server&	operator=(const Server &other);
 };

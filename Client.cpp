@@ -6,6 +6,24 @@ Client::Client(std::string nick, int fd) : _nickname(nick), _socketFd(fd) {}
 
 Client::~Client() {}
 
+Client::Client(const Client &other)
+{
+	if (this == &other)
+		return ;
+	*this = other;
+}
+
+Client&	Client::operator=(const Client &other)
+{
+	if (this == &other)
+		return (*this);
+	this->_nickname = other._nickname;
+	this->_socketFd = other._socketFd;
+	this->_event = other._event;
+	this->_connected = other._connected;
+	this->_channels = other._channels;
+}
+
 std::string	Client::getNickname() const
 {	return (this->_nickname);	}
 
