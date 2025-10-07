@@ -24,6 +24,7 @@ Client&	Client::operator=(const Client &other)
 	this->_event = other._event;
 	this->_connected = other._connected;
 	this->_channels = other._channels;
+	return (*this);
 }
 
 std::string	Client::getNickname() const

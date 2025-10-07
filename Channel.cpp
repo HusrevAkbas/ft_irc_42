@@ -23,6 +23,7 @@ Channel&	Channel::operator=(const Channel &other)
 	this->_t_topicSetable = other._t_topicSetable;
 	this->_k_usePassword = other._k_usePassword;
 	this->_l_userLimit = other._l_userLimit;
+	return (*this);
 }
 
 std::string	Channel::getName() const
