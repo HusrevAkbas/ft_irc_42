@@ -15,6 +15,7 @@ class Server
 		epoll_event	_event;
 		std::vector<Client>		_clients;
 		std::vector<Channel>	_channels;
+		time_t		_timestamp;
 	public:
 		Server();
 		~Server();
@@ -28,4 +29,13 @@ class Server
 		std::string	getPass() const;
 		sockaddr_in	getAddr() const;
 		epoll_event	getEvent() const;
+		std::vector<Client>		getClients() const;
+		std::vector<Channel>	getChannels() const;
+
+		//CHOOSE ONE METHOD
+		// 1- return pointer and NULL if dont find
+		// 2- return reference and throw error if dont find
+		Client	&findClientByNick(std::string clientName);
+		Client	&findClientByFd(int clientFd);
+		Channel	&findChannelByName(std::string channelName);
 };

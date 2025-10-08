@@ -3,3 +3,4 @@ irc
 objs/
 *.o
 *.d
+todo.txt

@@ -2,7 +2,9 @@ CFLAGS		=	-std=c++98 -MMD -MP# -Wall -Wextra -Werror
 
 COMPILER	=	c++
 
-SRCS		=	main.cpp Client.cpp helper.cpp Server.cpp Channel.cpp
+SRCS		=	main.cpp Client.cpp helper.cpp Server.cpp Channel.cpp $(addprefix $(COMMANDSDIR), $(COMMANDSSRC))
+COMMANDSDIR	=	commands/
+COMMANDSSRC	=	Command.cpp command_parser.cpp InviteCommand.cpp KickCommand.cpp ModeCommand.cpp TopicCommand.cpp
 
 OBJDIR		=	objs/
 OBJS		=	$(addprefix $(OBJDIR), $(SRCS:.cpp=.o))

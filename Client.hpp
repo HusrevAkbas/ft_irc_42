@@ -12,6 +12,8 @@ class Client
 		epoll_event	_event;
 		int			_connected;
 		std::vector<Channel *>	_channels;
+		int			_channelLimit;
+		time_t		_timestamp;
 	public:
 		Client();
 		Client(int fd);
@@ -19,6 +21,9 @@ class Client
 		~Client();
 		Client(const Client &other);
 		Client&	operator=(const Client &other);
+
+		static int			totalClientCount;
+		static const int	totalClientLimit;
 
 		std::string	getNickname() const;
 		void	setNickname(std::string nick);

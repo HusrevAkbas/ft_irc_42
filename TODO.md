@@ -49,3 +49,8 @@ Classes
 		JOIN
 		PRIVMSG
 		PING
+		LEAVE
+		QUIT
+		NICK
+		PASS
+		USER

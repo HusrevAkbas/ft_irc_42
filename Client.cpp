@@ -27,6 +27,9 @@ Client&	Client::operator=(const Client &other)
 	return (*this);
 }
 
+int	Client::totalClientCount = 0;
+const int	Client::totalClientLimit = 1000;
+
 std::string	Client::getNickname() const
 {	return (this->_nickname);	}
 

@@ -26,6 +26,9 @@ Channel&	Channel::operator=(const Channel &other)
 	return (*this);
 }
 
+int			Channel::totalChannelCount = 0;
+const int	Channel::totalChannelLimit = 100;
+
 std::string	Channel::getName() const
 {
 	return (this->_name);
@@ -64,4 +67,9 @@ int	Channel::getUserLimit() const
 std::vector<Client *>	Channel::getOperators() const
 {
 	return (this->_operators);
+}
+
+std::vector<Client *>	Channel::getClients() const
+{
+	return (this->_clients);
 }

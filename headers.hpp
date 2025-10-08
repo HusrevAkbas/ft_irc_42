@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <strings.h>
 #include <vector>
+#include <ctime>
+#include <stdexcept>
 
 #include <sys/socket.h>
 #include <netinet/in.h>

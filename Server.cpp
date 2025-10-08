@@ -58,3 +58,41 @@ epoll_event	Server::getEvent() const
 {
 	return (this->_event);
 }
+std::vector<Client>		Server::getClients() const
+{
+	return (this->_clients);
+}
+std::vector<Channel>	Server::getChannels() const
+{
+	return (this->_channels);
+}
+
+Client	&Server::findClientByNick(std::string clientName)
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->_clients[i].getNickname() == clientName)
+			return (this->_clients[i]);
+	}
+	throw std::invalid_argument("Client not found");
+}
+
+Client	&Server::findClientByFd(int clientFd)
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->_clients[i].getSocketFd() == clientFd)
+			return (this->_clients[i]);
+	}
+	throw std::invalid_argument("Client not found");
+}
+
+Channel	&Server::findChannelByName(std::string channelName)
+{
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i].getName() == channelName)
+			return (this->_channels[i]);
+	}
+	throw std::invalid_argument("Channel not found");
+}
