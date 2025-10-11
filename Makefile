@@ -10,7 +10,7 @@ OBJDIR		=	objs/
 OBJS		=	$(addprefix $(OBJDIR), $(SRCS:.cpp=.o))
 DEPS		=	$(addprefix $(OBJDIR), $(SRCS:.cpp=.d))
 
-NAME		=	irc
+NAME		=	ircserv
 
 all : $(NAME)
 
