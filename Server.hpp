@@ -4,6 +4,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+#define	MAX_CLIENTS		1000
+#define	MAX_CHANNELS	100
+
 class Server
 {
 	private:
@@ -13,8 +16,8 @@ class Server
 		std::string	_password;
 		sockaddr_in	_sockaddr;
 		epoll_event	_event;
-		std::vector<Client>		_clients;
-		std::vector<Channel>	_channels;
+		Client		_clients[MAX_CLIENTS];
+		Channel		_channels[MAX_CHANNELS];
 		time_t		_timestamp;
 	public:
 		Server();
@@ -29,8 +32,8 @@ class Server
 		std::string	getPass() const;
 		sockaddr_in	getAddr() const;
 		epoll_event	getEvent() const;
-		std::vector<Client>		getClients() const;
-		std::vector<Channel>	getChannels() const;
+		Client*		getClients();
+		Channel*	getChannels();
 
 		//CHOOSE ONE METHOD
 		// 1- return pointer and NULL if dont find

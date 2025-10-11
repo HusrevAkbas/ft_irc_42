@@ -24,8 +24,10 @@ Server&	Server::operator=(const Server &other)
 	this->_password = other._password;
 	this->_sockaddr = other._sockaddr;
 	this->_event = other._event;
-	this->_clients = other._clients;
-	this->_channels = other._channels;
+	for (size_t i = 0; i < MAX_CLIENTS; i++)
+		this->_clients[i] = other._clients[i];
+	for (size_t i = 0; i < MAX_CLIENTS; i++)
+		this->_channels[i] = other._channels[i];
 	return (*this);
 }
 
@@ -58,18 +60,18 @@ epoll_event	Server::getEvent() const
 {
 	return (this->_event);
 }
-std::vector<Client>		Server::getClients() const
+Client*		Server::getClients()
 {
 	return (this->_clients);
 }
-std::vector<Channel>	Server::getChannels() const
+Channel*	Server::getChannels()
 {
 	return (this->_channels);
 }
 
 Client	&Server::findClientByNick(std::string clientName)
 {
-	for (size_t i = 0; i < this->_clients.size(); i++)
+	for (size_t i = 0; i < MAX_CLIENTS; i++)
 	{
 		if (this->_clients[i].getNickname() == clientName)
 			return (this->_clients[i]);
@@ -79,7 +81,7 @@ Client	&Server::findClientByNick(std::string clientName)
 
 Client	&Server::findClientByFd(int clientFd)
 {
-	for (size_t i = 0; i < this->_clients.size(); i++)
+	for (size_t i = 0; i < MAX_CLIENTS; i++)
 	{
 		if (this->_clients[i].getSocketFd() == clientFd)
 			return (this->_clients[i]);
@@ -89,7 +91,7 @@ Client	&Server::findClientByFd(int clientFd)
 
 Channel	&Server::findChannelByName(std::string channelName)
 {
-	for (size_t i = 0; i < this->_channels.size(); i++)
+	for (size_t i = 0; i < MAX_CHANNELS; i++)
 	{
 		if (this->_channels[i].getName() == channelName)
 			return (this->_channels[i]);
