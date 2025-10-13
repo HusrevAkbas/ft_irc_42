@@ -7,6 +7,12 @@
 #define	MAX_CLIENTS		1000
 #define	MAX_CHANNELS	100
 
+/*
+	NOTES:
+		- clients and channels will be created by new keyword and
+			pointers will be stored in vectors
+*/
+
 class Server
 {
 	private:
@@ -16,8 +22,8 @@ class Server
 		std::string	_password;
 		sockaddr_in	_sockaddr;
 		epoll_event	_event;
-		Client		_clients[MAX_CLIENTS];
-		Channel		_channels[MAX_CHANNELS];
+		std::vector<Client *>	_clients;
+		std::vector<Channel *>	_channels;
 		time_t		_timestamp;
 	public:
 		Server();
