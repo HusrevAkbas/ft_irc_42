@@ -7,7 +7,7 @@
 #include "JoinCommand.hpp"
 #include "PrivmsgCommand.hpp"
 #include "PingCommand.hpp"
-#include "LeaveCommand.hpp"
+#include "PartCommand.hpp"
 #include "QuitCommand.hpp"
 #include "NickCommand.hpp"
 #include "PassCommand.hpp"

@@ -4,7 +4,7 @@ COMPILER	=	c++
 
 SRCS		=	main.cpp Client.cpp helper.cpp Server.cpp Channel.cpp $(addprefix $(COMMANDSDIR), $(COMMANDSSRC))
 COMMANDSDIR	=	commands/
-COMMANDSSRC	=	CapCommand.cpp Command.cpp command_parser.cpp InviteCommand.cpp JoinCommand.cpp KickCommand.cpp ModeCommand.cpp NickCommand.cpp PassCommand.cpp PingCommand.cpp PrivmsgCommand.cpp QuitCommand.cpp TopicCommand.cpp UserCommand.cpp
+COMMANDSSRC	=	CapCommand.cpp Command.cpp command_parser.cpp InviteCommand.cpp JoinCommand.cpp KickCommand.cpp ModeCommand.cpp NickCommand.cpp PartCommand.cpp PassCommand.cpp PingCommand.cpp PrivmsgCommand.cpp QuitCommand.cpp TopicCommand.cpp UserCommand.cpp
 
 OBJDIR		=	objs/
 OBJS		=	$(addprefix $(OBJDIR), $(SRCS:.cpp=.o))
