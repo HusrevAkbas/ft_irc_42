@@ -1,11 +1,56 @@
 #include "Server.hpp"
+#include <string>
+#include <sstream>
 
 #define	BUFFER_SIZE	1000
 
+bool	isArgValid(int argc, char** argv, std::string &password, int &port)
+{
+	std::stringstream	ss;
+	std::string			str_port;
+
+	// argument count
+	if (argc != 3)
+	{
+		std::cerr << "Program takes exatly 3 arguments\n./ircserv [port] [password]\n";
+		return (false);
+	}
+
+	// validate port
+	str_port = argv[1];
+	if (str_port.find_first_not_of("1234567890") != std::string::npos)
+	{
+		std::cerr << "Error: invalid char in PORT argument: " << str_port[str_port.find_first_not_of("1234567890")] << "\n";
+		return (false);
+	}
+	ss.str(str_port);
+	ss >> port;
+	if (port < 0 || port > 65535)
+	{
+		std::cerr << "Error: invalid port number.\n\t"
+		<<"- Port variable uses unsigned short int (2 bytes).\n\t- Usable range is [0 - 65535]\n";
+		return (false);
+	}
+	// check if password has only ascii printable characters
+	password = argv[2];
+	for (size_t i = 0; i < password.length(); i++)
+	{
+		if (!isprint(password[i]))
+		{
+			std::cerr << "Error: invalid password, only ascii printable characters are supported\n";
+			return (false);
+		}
+	}
+	return (true);
+}
+
 int	main(int argc, char **argv)
 {
-	(void) argc;
-	(void) argv;
+	std::string	password;
+	int			port;
+
+	if (!isArgValid(argc, argv, password, port))
+		return (0);
 
 	int	server_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 

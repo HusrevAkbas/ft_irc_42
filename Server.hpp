@@ -16,10 +16,10 @@
 class Server
 {
 	private:
-		int			_fd;
-		int			_epoll_fd;
-		std::string	_name;
-		std::string	_password;
+		const int	_fd;
+		const int	_epoll_fd;
+		const std::string	_name;
+		const std::string	_password;
 		sockaddr_in	_sockaddr;
 		epoll_event	_event;
 		std::vector<Client *>	_clients;
@@ -38,13 +38,16 @@ class Server
 		std::string	getPass() const;
 		sockaddr_in	getAddr() const;
 		epoll_event	getEvent() const;
-		Client*		getClients();
-		Channel*	getChannels();
+		time_t		getTimestamp() const;
+		std::vector<Client*>	getClients();
+		std::vector<Channel*>	getChannels();
 
-		//CHOOSE ONE METHOD
-		// 1- return pointer and NULL if dont find
-		// 2- return reference and throw error if dont find
-		Client	&findClientByNick(std::string clientName);
-		Client	&findClientByFd(int clientFd);
-		Channel	&findChannelByName(std::string channelName);
+		Client*		findClient(const Client * client) const;
+		Client*		findClientByNick(std::string clientName) const;
+		Client*		findClientByFd(int clientFd) const;
+		Channel*	findChannel(const Channel * channel) const;
+		Channel*	findChannelByName(std::string channelName) const;
+
+		void		addClient(Client *);
+		 void		addChannel(Channel *);
 };
