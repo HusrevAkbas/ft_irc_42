@@ -25,6 +25,7 @@ class Server
 		std::vector<Client *>	_clients;
 		std::vector<Channel *>	_channels;
 		time_t		_timestamp;
+		std::string	err_msg;
 	public:
 		Server();
 		~Server();
@@ -42,12 +43,20 @@ class Server
 		std::vector<Client*>	getClients();
 		std::vector<Channel*>	getChannels();
 
-		Client*		findClient(const Client * client) const;
+		std::vector<Client *>::iterator	findClientPos(const Client * client);
 		Client*		findClientByNick(std::string clientName) const;
 		Client*		findClientByFd(int clientFd) const;
-		Channel*	findChannel(const Channel * channel) const;
+		std::vector<Channel*>::iterator	findChannelPos(const Channel * channel);
 		Channel*	findChannelByName(std::string channelName) const;
 
-		void		addClient(Client *);
-		 void		addChannel(Channel *);
+		void		addClient(Client * client);
+		void		addChannel(Channel * channel);
+
+		void		removeClient(Client * client);
+		void		removeChannel(Channel * channel);
+
+		class ClientLimitReachedException: public std::exception
+		{	const char *what () const throw ();	};
+		class ChannelLimitReachedException: public std::exception
+		{	const char *what () const throw ();	};
 };

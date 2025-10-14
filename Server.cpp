@@ -72,14 +72,16 @@ std::vector<Channel *>	Server::getChannels()
 	return (this->_channels);
 }
 
-Client*	Server::findClient(const Client * client) const
+std::vector<Client *>::iterator	Server::findClientPos(const Client * client)
 {
+	return this->_clients.begin();
+
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i] == client)
-			return (this->_clients[i]);
+			return (this->_clients.begin() + i);
 	}
-	return (NULL);
+	return (this->_clients.end());
 }
 
 Client*	Server::findClientByNick(std::string clientName) const
@@ -102,14 +104,14 @@ Client*	Server::findClientByFd(int clientFd) const
 	return (NULL);
 }
 
-Channel*	Server::findChannel(const Channel * chan) const
+std::vector<Channel*>::iterator	Server::findChannelPos(const Channel * chan)
 {
 	for (size_t i = 0; i < this->_channels.size(); i++)
 	{
 		if (this->_channels[i] == chan)
-			return (this->_channels[i]);
+			return (this->_channels.begin() + i);
 	}
-	return (NULL);
+	return (this->_channels.end());
 }
 
 Channel*	Server::findChannelByName(std::string channelName) const
@@ -122,6 +124,10 @@ Channel*	Server::findChannelByName(std::string channelName) const
 	return (NULL);
 }
 
+/*
+	Adds client to list
+	check limits before calling this function
+*/
 void	Server::addClient(Client *client)
 {
 	// check for duplicates
@@ -133,6 +139,10 @@ void	Server::addClient(Client *client)
 	this->_clients.push_back(client);
 }
 
+/*
+	Adds channel to list
+	check limits before calling this function
+*/
 void		Server::addChannel(Channel * chan)
 {
 	// check for duplicates
@@ -142,4 +152,36 @@ void		Server::addChannel(Channel * chan)
 			return ;
 	}
 	this->_channels.push_back(chan);
+}
+
+void	Server::removeClient(Client * client)
+{
+	std::vector<Client *>::iterator	pos;
+
+	// be sure client exist in list
+	pos = this->findClientPos(client);
+	if (pos != this->_clients.end())
+	{
+		close(client->getSocketFd());
+		this->_clients.erase(pos);
+	}
+}
+
+void	Server::removeChannel(Channel * channel)
+{
+	std::vector<Channel *>::iterator	pos;
+
+	pos = this->findChannelPos(channel);
+	if (pos != this->_channels.end())
+		this->_channels.erase(pos);
+}
+
+const char*	Server::ClientLimitReachedException::what() const throw ()
+{
+	return ("ServerException: Client limit reached");
+}
+
+const char*	Server::ChannelLimitReachedException::what() const throw ()
+{
+	return ("ServerException: Channel limit reached");
 }
