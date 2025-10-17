@@ -2,10 +2,22 @@
 
 Server::Server() : _fd(-1), _epoll_fd(-1) {}
 
-Server::~Server() {}
+Server::~Server()
+{
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+	{
+		close ((*it)->getSocketFd());
+		delete *it;
+	}
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
+		delete *it;
+}
 
-Server::Server(int fd, int epollFd, std::string name, std::string pass)
-: _fd(fd), _epoll_fd(epollFd), _name(name), _password(pass) {}
+Server::Server(int fd, int epollFd, std::string name, std::string pass, sockaddr_in addr)
+: _fd(fd), _epoll_fd(epollFd), _name(name), _password(pass), _sockaddr(addr)
+{
+	this->_timestamp = time(NULL);
+}
 
 Server::Server(const Server &other) : _fd(other._fd), _epoll_fd(other._epoll_fd), _name(other._name), _password(other._password)
 {
@@ -176,6 +188,31 @@ void	Server::removeChannel(Channel * channel)
 		this->_channels.erase(pos);
 }
 
+void	Server::handleRequest(std::string request, int fd)
+{
+	try 
+	{
+		Command	*command = parseCommand(request);
+		Client	*client = findClientByFd(fd);
+		std::string	response;
+		
+		// let command class handle request
+
+		// response = command.getResponse(client);
+		
+		if (send(fd, response.c_str(), response.length(), 0) == -1)
+		{
+			std::cerr << "Error: response not sent fd: " << fd
+			<< "client: " << client->getNickname() << "\n";
+		}
+	}
+	catch (std::exception e)
+	{		
+		// TODO: output for development, testing and debugging, REMOVE after project is ready
+		std::cerr << e.what() << "\n";
+	}
+}
+
 const char*	Server::ClientLimitReachedException::what() const throw ()
 {
 	return ("ServerException: Client limit reached");
@@ -184,4 +221,17 @@ const char*	Server::ClientLimitReachedException::what() const throw ()
 const char*	Server::ChannelLimitReachedException::what() const throw ()
 {
 	return ("ServerException: Channel limit reached");
+}
+
+std::ostream&	operator<<(std::ostream& o, Server &server)
+{
+	time_t	time = server.getTimestamp();
+	o << "Server name: " << server.getName() << "\n"
+	<< "Password: " << server.getPass() << "\n"
+	<< "Ip: " << inet_ntoa(server.getAddr().sin_addr) << "\n"
+	<< "Port: " << ntohs(server.getAddr().sin_port) << "\n"
+	<< "Clients: " << server.getClients().size() << "\n"
+	<< "Channels: " << server.getChannels().size() << "\n"
+	<< "Created at: " << ctime(&time);
+	return (o);
 }

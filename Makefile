@@ -35,6 +35,6 @@ fclean : clean
 re : fclean all
 
 run : all clean
-	@./$(NAME) 4444 SAFEME
+	@./$(NAME) 3333 SAFEME
 
 .phony : all c clean f fclean re run

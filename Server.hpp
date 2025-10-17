@@ -3,9 +3,11 @@
 #include "headers.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "commands/Command.hpp"
 
 #define	MAX_CLIENTS		1000
 #define	MAX_CHANNELS	100
+#define SERVER_NAME		"ircserv42"
 
 /*
 	NOTES:
@@ -31,7 +33,7 @@ class Server
 		~Server();
 		Server(const Server &other);
 		Server&	operator=(const Server &other);
-		Server(int fd, int epollFd, std::string name, std::string pass);
+		Server(int fd, int epollFd, std::string name, std::string pass, sockaddr_in addr);
 
 		int	getFd();
 		int	getEpollFd();
@@ -55,8 +57,14 @@ class Server
 		void		removeClient(Client * client);
 		void		removeChannel(Channel * channel);
 
+		void	handleRequest(std::string request, int fd);
+
 		class ClientLimitReachedException: public std::exception
 		{	const char *what () const throw ();	};
 		class ChannelLimitReachedException: public std::exception
 		{	const char *what () const throw ();	};
 };
+
+std::ostream&	operator<<(std::ostream& o, Server &server);
+
+Command* parseCommand(const std::string& input);

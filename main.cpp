@@ -3,6 +3,7 @@
 #include <sstream>
 
 #define	BUFFER_SIZE	1000
+#define	MAX_READY_EVENTS	100
 
 bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 {
@@ -27,8 +28,8 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	ss >> port;
 	if (port < 0 || port > 65535)
 	{
-		std::cerr << "Error: invalid port number.\n\t"
-		<<"- Port variable uses unsigned short int (2 bytes).\n\t- Usable range is [0 - 65535]\n";
+		std::cerr << "Error: invalid port number.\n"
+		<<"\t- Port variable uses unsigned short int (2 bytes).\n\t- Usable range is [0 - 65535]\n";
 		return (false);
 	}
 	// check if password has only ascii printable characters
@@ -72,28 +73,28 @@ int	main(int argc, char **argv)
 	//	assign an address to server socket
 	sockaddr_in	server_address;
 	server_address.sin_family = AF_INET;
-	server_address.sin_port = htons(8081);
+	server_address.sin_port = htons(port);
 	server_address.sin_addr.s_addr = INADDR_ANY;
 
 	//	bind server socket and address
 	if (bind(server_socket_fd, (sockaddr *) &server_address, sizeof(server_address)))
 	{
-		std::cerr << "Error: bind " << errno << "\n";
+		std::cerr << "Error: bind, please try another port\n";
 		close (server_socket_fd);
 		return (1);
 	}
 
-	//	set server socket ready to listen
+	//	set server socket start to listen
 	if (listen(server_socket_fd, 100) == -1)
 	{
-		std::cerr << "Error: listen " << errno << "\n";
+		std::cerr << "Error: listen\n";
 		close (server_socket_fd);
 		return (1);
 	}
 
 	//	create epoll instance
-	int	efd = epoll_create1(0);
-	if (efd == -1)
+	int	epoll_fd = epoll_create1(0);
+	if (epoll_fd == -1)
 	{
 		std::cerr << "Error: epoll_create1\n";
 		return (1);
@@ -104,27 +105,33 @@ int	main(int argc, char **argv)
 	interest.data.fd = server_socket_fd;
 
 	//	add, delete or modify events with epoll_ctl
-	int	status = epoll_ctl(efd, EPOLL_CTL_ADD, server_socket_fd, &interest);
+	int	status = epoll_ctl(epoll_fd, EPOLL_CTL_ADD, server_socket_fd, &interest);
 	if (status == -1)
 	{
 		std::cerr << "Error: epoll_ctl, add, server fd\n";
 		return (1);
 	}
 
-	struct epoll_event	pending[20];
+	Server	server(server_socket_fd, epoll_fd, SERVER_NAME, password, server_address);
+	// std::cout << "Server start on port " << ntohs(server.getAddr().sin_port)
+	// << "\nPassword(evaluation only): " << server.getPass() << "\n";
+	std::cout << server;
+
+	struct epoll_event	pending[MAX_READY_EVENTS];
 	char		buff[BUFFER_SIZE];
 	std::string	input;
-	std::string	toSend = "this is from SERVER";
 
 	while (1)
 	{
 		//	wait events for registered file descriptors
-		int	event_n = epoll_wait(efd, pending, 20, -1);
+		int	event_n = epoll_wait(epoll_fd, pending, MAX_READY_EVENTS, -1);
 		if (event_n == -1)
 		{
 			std::cerr << "Error: epoll_wait\n";
 			return (1);
 		}
+
+		// loop through events which have input
 		for (int i = 0; i < event_n; i++)
 		{
 			//	accept connection request for server socket and only accept
@@ -133,6 +140,14 @@ int	main(int argc, char **argv)
 			{
 				sockaddr_in	socket_addr;
 				socklen_t	socket_len = sizeof(socket_addr);
+
+				// check if client limit reached
+				if (server.getClients().size() == MAX_CLIENTS)
+				{
+					// send deny response if there is,
+					// or just ignore
+					continue ;
+				}
 
 				// accept connection
 				int client_fd = accept(server_socket_fd, (sockaddr *) &socket_addr, &socket_len);
@@ -148,23 +163,27 @@ int	main(int argc, char **argv)
 				//set fd as non-blocking
 				fcntl(client_fd, F_SETFL, O_NONBLOCK);
 
-				// set event for client to be able to add interest list
+				// set event for client to add interest list
 				epoll_event	client_event;
 				client_event.events = EPOLLIN | EPOLLET;
 				client_event.data.fd = client_fd;
 
 				//	add client to interest list. let epoll listen to client
-				if (epoll_ctl(efd, EPOLL_CTL_ADD, client_fd, &client_event) == -1)
+				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_event) == -1)
 				{
 					std::cerr << "Error epoll_ctl, client\n";
-					return (1);
+					continue ;
 				}
+
+				Client	*client = new Client(client_fd);
+				server.addClient(client);
 			}
 			else if (pending[i].events & EPOLLIN)
 			{
-				//	read incoming messages in this part, read all data for event because
-				//	it is edge triggered epoll. It only triggers per message.
-				//	If you dont get the whole message, you will wait until next message
+				//	Read incoming messages:
+				//	Read all data for event because it is edge triggered epoll.
+				//	It only triggers per message.
+				//	If you dont get the whole message here, you will wait until next message
 				int	len = 1;
 				while (len > 0)
 				{
@@ -174,21 +193,24 @@ int	main(int argc, char **argv)
 					{
 						std::cout << "Disconnected BUFFER LEN = 0: fd: " << pending[i].data.fd << "\n";
 						//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
-						epoll_ctl(efd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
+						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 						close (pending[i].data.fd);
 					}
 					buff[len] = '\0';
 					input += buff;
 				}
+				// TODO: output for development, testing and debugging, REMOVE after project is ready
 				std::cout << input << "\n";
 				// HANDLE EVENTS HERE
+				// data.fd is client's socket file descripter
+				server.handleRequest(input, pending[i].data.fd);
 				input.clear();
 			}
 			else
 			{
 				std::cout << "Disconnected ANOTHER EVENT: " << pending[i].data.fd << "\n";
 				//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
-				epoll_ctl(efd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
+				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 				close(pending[i].data.fd);
 			}
 		}
