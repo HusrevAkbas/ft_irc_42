@@ -118,7 +118,7 @@ int	main(int argc, char **argv)
 	std::cout << server;
 
 	struct epoll_event	pending[MAX_READY_EVENTS];
-	char		buff[BUFFER_SIZE];
+	char		buff[BUFFER_SIZE + 1];
 	std::string	input;
 
 	while (1)
@@ -184,10 +184,10 @@ int	main(int argc, char **argv)
 				//	Read all data for event because it is edge triggered epoll.
 				//	It only triggers per message.
 				//	If you dont get the whole message here, you will wait until next message
-				int	len = 1;
-				while (len > 0)
+				int	len = BUFFER_SIZE;
+				while (len == BUFFER_SIZE)
 				{
-					len = recv(pending[i].data.fd, buff, BUFFER_SIZE - 1, 0);
+					len = recv(pending[i].data.fd, buff, BUFFER_SIZE, 0);
 					if (len == 0 || (len == -1 && errno != EAGAIN && errno != EWOULDBLOCK))
 					{
 						std::cout << "Disconnected BUFFER LEN = 0: fd: " << pending[i].data.fd << "\n";
@@ -198,14 +198,12 @@ int	main(int argc, char **argv)
 					}
 					if (len == -1)
 						continue ;
-					std::cout << "buff and its length: " << buff << " - " << len << "\n";
 					buff[len] = '\0';
 					input.append(buff, len);
 				}
 				// HANDLE EVENTS HERE
 				// data.fd is client's socket file descripter
 				server.handleRequest(input, pending[i].data.fd);
-				// input.clear();
 				input = "";
 			}
 			else
@@ -214,6 +212,7 @@ int	main(int argc, char **argv)
 				//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 				close(pending[i].data.fd);
+				server.removeClient(server.findClientByFd(pending[i].data.fd));
 			}
 		}
 	}
