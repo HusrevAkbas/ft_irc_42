@@ -194,6 +194,8 @@ void	Server::removeChannel(Channel * channel)
 
 void	Server::handleRequest(std::string request, int fd)
 {
+	// TODO: output for development, testing and debugging, REMOVE after project is ready
+	std::cout << "---REQUEST---:\n" << request << "---END OF REQUEST---\n";
 	try
 	{
 		Command	*command = parseCommand(request);
@@ -205,7 +207,7 @@ void	Server::handleRequest(std::string request, int fd)
 	command->response(*client, *this);
 	}
 	catch (std::exception e)
-	{		
+	{
 		// TODO: output for development, testing and debugging, REMOVE after project is ready
 		std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
 	}
