@@ -196,20 +196,14 @@ void	Server::handleRequest(std::string request, int fd)
 		Client	*client = findClientByFd(fd);
 		std::string	response;
 		
-		// let command class handle request
+		// let command class handle request and then send response
 
-		// response = command.getResponse(client);
-		
-		if (send(fd, response.c_str(), response.length(), 0) == -1)
-		{
-			std::cerr << "Error: response not sent fd: " << fd
-			<< "client: " << client->getNickname() << "\n";
-		}
+	command->response(*client, *this);
 	}
 	catch (std::exception e)
 	{		
 		// TODO: output for development, testing and debugging, REMOVE after project is ready
-		std::cerr << e.what() << "\n";
+		std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
 	}
 }
 
