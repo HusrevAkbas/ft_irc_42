@@ -175,6 +175,7 @@ void	Server::removeClient(Client * client)
 	if (pos != this->_clients.end())
 	{
 		close(client->getSocketFd());
+		delete (*pos);
 		this->_clients.erase(pos);
 	}
 }
@@ -185,12 +186,15 @@ void	Server::removeChannel(Channel * channel)
 
 	pos = this->findChannelPos(channel);
 	if (pos != this->_channels.end())
+	{
+		delete (*pos);
 		this->_channels.erase(pos);
+	}
 }
 
 void	Server::handleRequest(std::string request, int fd)
 {
-	try 
+	try
 	{
 		Command	*command = parseCommand(request);
 		Client	*client = findClientByFd(fd);
