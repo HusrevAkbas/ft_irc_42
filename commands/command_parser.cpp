@@ -134,9 +134,9 @@ Command* parseCommand(const std::string& input) {
         if (params.size() < 4) {
             throw std::invalid_argument("USER command requires 4 parameters: <username> 0 * <realname>");
         }
-        if (params[1] != "0" || params[2] != "*") {
-            throw std::invalid_argument("USER command parameters 2 and 3 should be '0' and '*'");
-        }
+        // if (params[1] != "0" || params[2] != "*") {
+        //     throw std::invalid_argument("USER command parameters 2 and 3 should be '0' and '*'");
+        // }
         return new UserCommand(params[0], params[3]);
     } else {
         throw std::invalid_argument("Invalid command: " + cmdType);

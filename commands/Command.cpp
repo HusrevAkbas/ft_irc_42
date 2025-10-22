@@ -14,5 +14,5 @@ std::string Command::getType() const {
 */
 void    Command::response(Client &client, Server &server)
 {
-    std::cout << "Command: " << this->type << "\n";
+    std::cout << YELLOW << "Command: " << RESET << this->type << "\n";
 }

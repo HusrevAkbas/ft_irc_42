@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <strings.h>
+#include <sstream>
 #include <vector>
 #include <ctime>
 #include <stdexcept>
@@ -17,3 +17,7 @@
 #include <fcntl.h>
 
 #include <errno.h>
+
+#define	GREEN	"\e[3;32m"
+#define	YELLOW	"\e[3;33m"
+#define	RESET	"\e[0m"

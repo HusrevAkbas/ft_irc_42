@@ -170,6 +170,12 @@ void	Server::removeClient(Client * client)
 {
 	std::vector<Client *>::iterator	pos;
 
+	if (!client)
+	{
+		std::cout << "Client NOT found\n";
+		return ;
+	}
+
 	// be sure client exist in list
 	pos = this->findClientPos(client);
 	if (pos != this->_clients.end())
@@ -192,24 +198,31 @@ void	Server::removeChannel(Channel * channel)
 	}
 }
 
-void	Server::handleRequest(std::string request, int fd)
+void	Server::handleRequest(std::string input, int fd)
 {
-	// TODO: output for development, testing and debugging, REMOVE after project is ready
-	std::cout << "---REQUEST---:\n" << request << "---END OF REQUEST---\n";
-	try
-	{
-		Command	*command = parseCommand(request);
-		Client	*client = findClientByFd(fd);
-		std::string	response;
-		
-		// let command class handle request and then send response
+	std::stringstream	ss(input);
+	std::string	request;
 
-	command->response(*client, *this);
-	}
-	catch (std::exception e)
+	// client may send many request at once, divide requests then process
+	while (std::getline(ss, request))
 	{
+		request += "\n";
 		// TODO: output for development, testing and debugging, REMOVE after project is ready
-		std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
+		std::cout << GREEN << "---REQUEST---: " << RESET << request;
+		try
+		{
+			Command	*command = parseCommand(request);
+			Client	*client = findClientByFd(fd);
+			std::string	response;
+			
+			// let command class handle request and then send response
+			command->response(*client, *this);
+		}
+		catch (std::exception e)
+		{
+			// TODO: output for development, testing and debugging, REMOVE after project is ready
+			std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
+		}
 	}
 }
 

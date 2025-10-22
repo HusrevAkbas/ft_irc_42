@@ -190,7 +190,7 @@ int	main(int argc, char **argv)
 					len = recv(pending[i].data.fd, buff, BUFFER_SIZE, 0);
 					if (len == 0 || (len == -1 && errno != EAGAIN && errno != EWOULDBLOCK))
 					{
-						std::cout << "Disconnected BUFFER LEN = 0: fd: " << pending[i].data.fd << "\n";
+						std::cout << "Disconnected fd: " << pending[i].data.fd << "\n";
 						//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 						close (pending[i].data.fd);
