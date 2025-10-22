@@ -98,7 +98,7 @@ std::vector<Client *>::iterator	Server::findClientPos(const Client * client)
 
 Client*	Server::findClientByNick(std::string clientName) const
 {
-	for (size_t i = 0; i < this->_channels.size(); i++)
+	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i]->getNickname() == clientName)
 			return (this->_clients[i]);
@@ -108,7 +108,7 @@ Client*	Server::findClientByNick(std::string clientName) const
 
 Client*	Server::findClientByFd(int clientFd) const
 {
-	for (size_t i = 0; i < this->_channels.size(); i++)
+	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i]->getSocketFd() == clientFd)
 			return (this->_clients[i]);

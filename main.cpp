@@ -193,7 +193,9 @@ int	main(int argc, char **argv)
 						std::cout << "Disconnected fd: " << pending[i].data.fd << "\n";
 						//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
-						close (pending[i].data.fd);
+						server.removeClient(server.findClientByFd(pending[i].data.fd));
+						// removeClient also close fd
+						// close(pending[i].data.fd);
 						continue ;
 					}
 					if (len == -1)
@@ -211,8 +213,9 @@ int	main(int argc, char **argv)
 				std::cout << "Disconnected ANOTHER EVENT: " << pending[i].data.fd << "\n";
 				//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
-				close(pending[i].data.fd);
 				server.removeClient(server.findClientByFd(pending[i].data.fd));
+				// removeClient also close fd
+				// close(pending[i].data.fd);
 			}
 		}
 	}
