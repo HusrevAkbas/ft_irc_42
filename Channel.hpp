@@ -19,6 +19,7 @@ class Channel
 		time_t		_timestamp;
 	public:
 		Channel();
+		Channel(const std::string &name);
 		~Channel();
 		Channel(const Channel &other);
 		Channel& operator=(const Channel &other);
@@ -37,4 +38,19 @@ class Channel
 		int		getUserLimit() const;
 		std::vector<Client *>	getOperators() const;
 		std::vector<Client *>	getClients() const;
+
+		void	setName(const std::string &name);
+		void	setPassword(const std::string &pass);
+		void	setTopic(const std::string &topic);
+		void	setInviteOnly(bool status);
+		void	setTopicSetable(bool status);
+		void	setUsePassword(bool status);
+		void	setUserLimit(int limit);
+
+		void	addClient(Client &client);
+		void	addOperator(Client &client);
+		void	removeClient(Client &client);
+		void	removeOperator(Client &client);
+		bool	isClientInChannel(Client &client) const;
+		bool	isOperator(Client &client) const;
 };

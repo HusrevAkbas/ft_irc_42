@@ -1,5 +1,4 @@
-#ifndef PASSCOMMAND_HPP
-#define PASSCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -9,12 +8,12 @@ private:
     std::string password;
 
 public:
+    PassCommand();
     PassCommand(const std::string& pass);
-    virtual ~PassCommand();
+    PassCommand(const PassCommand& other);
+    PassCommand& operator=(const PassCommand& other);
+    ~PassCommand();
 
     std::string getPassword() const;
-
     void response(Client &client, Server &server);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef CAPCOMMAND_HPP
-#define CAPCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -10,13 +9,13 @@ private:
     std::string capabilities;
 
 public:
+    CapCommand();
     CapCommand(const std::string& subcmd, const std::string& caps);
-    virtual ~CapCommand();
+    CapCommand(const CapCommand& other);
+    CapCommand& operator=(const CapCommand& other);
+    ~CapCommand();
 
     std::string getSubcommand() const;
     std::string getCapabilities() const;
-
     void response(Client &client, Server &server);
 };
-
-#endif

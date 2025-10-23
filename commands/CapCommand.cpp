@@ -1,7 +1,22 @@
 #include "CapCommand.hpp"
 
+CapCommand::CapCommand() : Command("CAP") {}
+
 CapCommand::CapCommand(const std::string& subcmd, const std::string& caps)
     : Command("CAP"), subcommand(subcmd), capabilities(caps) {}
+
+CapCommand::CapCommand(const CapCommand& other) : Command("CAP") {
+    *this = other;
+}
+
+CapCommand& CapCommand::operator=(const CapCommand& other) {
+    if (this != &other) {
+        Command::operator=(other);
+        subcommand = other.subcommand;
+        capabilities = other.capabilities;
+    }
+    return *this;
+}
 
 CapCommand::~CapCommand() {}
 
@@ -21,7 +36,7 @@ void    CapCommand::response(Client &client, Server &server)
         .append(server.getName())
         .append(" CAP * LS\r\n");
     if (this->subcommand == "LS")
-        send(client.getSocketFd(), response.c_str(), response.length(), 0);
+        server.sendResponse(client, response);
     if (this->subcommand == "END")
         client.setConnected(1);
 }

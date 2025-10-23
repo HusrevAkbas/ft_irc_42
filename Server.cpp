@@ -226,6 +226,11 @@ void	Server::handleRequest(std::string input, int fd)
 	}
 }
 
+void Server::sendResponse(Client &client, const std::string& response)
+{
+	send(client.getSocketFd(), response.c_str(), response.length(), 0);
+}
+
 const char*	Server::ClientLimitReachedException::what() const throw ()
 {
 	return ("ServerException: Client limit reached");

@@ -1,5 +1,4 @@
-#ifndef TOPICCOMMAND_HPP
-#define TOPICCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -10,11 +9,13 @@ private:
     std::string topic;
 
 public:
+    TopicCommand();
     TopicCommand(const std::string& chan, const std::string& top);
-    virtual ~TopicCommand();
+    TopicCommand(const TopicCommand& other);
+    TopicCommand& operator=(const TopicCommand& other);
+    ~TopicCommand();
 
     std::string getChannel() const;
     std::string getTopic() const;
+    void response(Client &client, Server &server);
 };
-
-#endif
