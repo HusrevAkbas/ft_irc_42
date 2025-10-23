@@ -13,6 +13,8 @@ public:
     virtual ~PassCommand();
 
     std::string getPassword() const;
+
+    void response(Client &client, Server &server);
 };
 
 #endif

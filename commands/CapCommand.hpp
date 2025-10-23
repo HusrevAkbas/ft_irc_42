@@ -15,6 +15,8 @@ public:
 
     std::string getSubcommand() const;
     std::string getCapabilities() const;
+
+    void response(Client &client, Server &server);
 };
 
 #endif

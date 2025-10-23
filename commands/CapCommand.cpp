@@ -12,3 +12,16 @@ std::string CapCommand::getSubcommand() const {
 std::string CapCommand::getCapabilities() const {
     return capabilities;
 }
+
+void    CapCommand::response(Client &client, Server &server)
+{
+    std::string response;
+
+    response.append(":")
+        .append(server.getName())
+        .append(" CAP * LS\r\n");
+    if (this->subcommand == "LS")
+        send(client.getSocketFd(), response.c_str(), response.length(), 0);
+    if (this->subcommand == "END")
+        client.setConnected(1);
+}

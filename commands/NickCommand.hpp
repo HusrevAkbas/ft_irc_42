@@ -13,6 +13,8 @@ public:
     virtual ~NickCommand();
 
     std::string getNickname() const;
+
+    void response(Client &client, Server &server);
 };
 
 #endif
