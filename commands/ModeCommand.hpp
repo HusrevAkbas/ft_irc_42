@@ -1,22 +1,23 @@
-#ifndef MODECOMMAND_HPP
-#define MODECOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
 
 class ModeCommand : public Command {
 private:
-    std::string channel;
-    std::string mode;
+    std::string target;
+    std::string modeString;
     std::string modeParams;
 
 public:
-    ModeCommand(const std::string& chan, const std::string& mod, const std::string& params);
-    virtual ~ModeCommand();
+    ModeCommand();
+    ModeCommand(const std::string& tgt, const std::string& modeStr, const std::string& params);
+    ModeCommand(const ModeCommand& other);
+    ModeCommand& operator=(const ModeCommand& other);
+    ~ModeCommand();
 
-    std::string getChannel() const;
-    std::string getMode() const;
+    std::string getTarget() const;
+    std::string getModeString() const;
     std::string getModeParams() const;
+    void response(Client &client, Server &server);
 };
-
-#endif

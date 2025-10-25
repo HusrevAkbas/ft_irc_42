@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
 Client::Client() : _socketFd(-1) {}
 
@@ -53,3 +54,49 @@ int	Client::getConnected()
 
 void	Client::setConnected(int status)
 {	this->_connected = status;	}
+
+std::vector<Channel *>	Client::getChannels() const
+{
+	return (this->_channels);
+}
+
+void	Client::addChannel(Channel *channel)
+{
+	if (!channel)
+		return;
+
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i] == channel)
+			return;
+	}
+	this->_channels.push_back(channel);
+}
+
+void	Client::removeChannel(Channel *channel)
+{
+	if (!channel)
+		return;
+
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it)
+	{
+		if (*it == channel)
+		{
+			this->_channels.erase(it);
+			return;
+		}
+	}
+}
+
+bool	Client::isInChannel(Channel *channel) const
+{
+	if (!channel)
+		return false;
+
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i] == channel)
+			return true;
+	}
+	return false;
+}

@@ -1,5 +1,4 @@
-#ifndef USERCOMMAND_HPP
-#define USERCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -10,11 +9,13 @@ private:
     std::string realname;
 
 public:
+    UserCommand();
     UserCommand(const std::string& user, const std::string& real);
-    virtual ~UserCommand();
+    UserCommand(const UserCommand& other);
+    UserCommand& operator=(const UserCommand& other);
+    ~UserCommand();
 
     std::string getUsername() const;
     std::string getRealname() const;
+    void response(Client &client, Server &server);
 };
-
-#endif

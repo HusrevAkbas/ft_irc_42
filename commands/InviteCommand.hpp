@@ -1,5 +1,4 @@
-#ifndef INVITECOMMAND_HPP
-#define INVITECOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -10,11 +9,13 @@ private:
     std::string channel;
 
 public:
+    InviteCommand();
     InviteCommand(const std::string& nick, const std::string& chan);
+    InviteCommand(const InviteCommand& other);
+    InviteCommand& operator=(const InviteCommand& other);
     virtual ~InviteCommand();
 
     std::string getNickname() const;
     std::string getChannel() const;
+    void response(Client &client, Server &server);
 };
-
-#endif

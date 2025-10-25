@@ -33,6 +33,11 @@ class Client
 		void	setEvent(struct epoll_event event);
 		int		getConnected();
 		void	setConnected(int status);
+		std::vector<Channel *>	getChannels() const;
+
+		void	addChannel(Channel *channel);
+		void	removeChannel(Channel *channel);
+		bool	isInChannel(Channel *channel) const;
 };
 
 void	checkConnection(std::string input, Client &client);

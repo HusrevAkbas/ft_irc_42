@@ -1,5 +1,4 @@
-#ifndef NICKCOMMAND_HPP
-#define NICKCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -9,12 +8,12 @@ private:
     std::string nickname;
 
 public:
+    NickCommand();
     NickCommand(const std::string& nick);
-    virtual ~NickCommand();
+    NickCommand(const NickCommand& other);
+    NickCommand& operator=(const NickCommand& other);
+    ~NickCommand();
 
     std::string getNickname() const;
-
     void response(Client &client, Server &server);
 };
-
-#endif

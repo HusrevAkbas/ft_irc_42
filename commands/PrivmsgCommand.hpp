@@ -1,5 +1,4 @@
-#ifndef PRIVMSGCOMMAND_HPP
-#define PRIVMSGCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -10,11 +9,13 @@ private:
     std::string message;
 
 public:
+    PrivmsgCommand();
     PrivmsgCommand(const std::string& tgt, const std::string& msg);
-    virtual ~PrivmsgCommand();
+    PrivmsgCommand(const PrivmsgCommand& other);
+    PrivmsgCommand& operator=(const PrivmsgCommand& other);
+    ~PrivmsgCommand();
 
     std::string getTarget() const;
     std::string getMessage() const;
+    void response(Client &client, Server &server);
 };
-
-#endif
