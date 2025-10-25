@@ -7,32 +7,44 @@ class Channel;
 class Client
 {
 	private:
-		std::string	_nickname;
-		int			_socketFd;
-		epoll_event	_event;
-		int			_connected;
+		std::string				_nickname;
+		std::string				_username; //*
+		epoll_event				_event;
 		std::vector<Channel *>	_channels;
-		int			_channelLimit;
-		time_t		_timestamp;
+		int						_socketFd;
+		int						_connected;
+		int						_channelLimit;
+		time_t					_timestamp;
 	public:
 		Client();
 		Client(int fd);
 		Client(std::string nick, int socketFd, epoll_event event);
-		~Client();
 		Client(const Client &other);
 		Client&	operator=(const Client &other);
+		~Client();
 
 		static int			totalClientCount;
 		static const int	totalClientLimit;
 
-		std::string	getNickname() const;
-		void	setNickname(std::string nick);
-		int		getSocketFd() const;
-		void	setSocketFd(int fd);
-		epoll_event	getEvent();
-		void	setEvent(struct epoll_event event);
-		int		getConnected();
-		void	setConnected(int status);
-};
+		void		setNickname(const std::string nick);
+		void		setUsername(const std::string username);
+		void		setEvent(struct epoll_event event);
+		void		setChannels(std::vector<Channel *>);
+		void		setSocketFd(int fd);
+		void		setConnected(int status);
+		void		setChannelLimit(int limit);
+		void		setTimestamp(time_t time);
+
+		std::string				getNickname() const;
+		std::string				getUsername() const;
+		epoll_event				getEvent();
+		std::vector<Channel *>	getChannels();
+		int						getSocketFd() const;
+		int						getConnected();
+		int						getChannelLimit();
+		time_t					getTimestamp();
+
+		void	removeChannel(Channel* channel);
+	};
 
 void	checkConnection(std::string input, Client &client);
