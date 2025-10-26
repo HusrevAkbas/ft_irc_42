@@ -55,6 +55,8 @@ Classes
 		PASS
 		USER
 
+		WHO
+
 ISSUES:
 	23.10.2025:
 
