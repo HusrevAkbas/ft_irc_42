@@ -25,7 +25,22 @@ std::string NickCommand::getNickname() const {
 
 void NickCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    (void)server;
-    (void)client;
+    std::string response;
+    std::string msg;
+
+    // check if nickname exist
+    // if exist send deny message, if not registered close connection
+    if (server.findClientByNick(this->getNickname()))
+    {
+        msg = "Nickname is already in use";
+        response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
+        send(client.getSocketFd(), response.c_str(), response.length(), 0);
+        if (!client.getConnected())
+            server.removeClient(server.findClientByFd(client.getSocketFd()));
+    }
+    // set client nickname
+    else
+    {
+        client.setNickname(this->nickname);
+    }
 }

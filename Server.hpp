@@ -58,7 +58,7 @@ class Server
 		void		removeChannel(Channel * channel);
 
 		void	handleRequest(std::string request, int fd);
-		void sendResponse(Client &client, const std::string& response);
+		void	sendResponse(Client &client, const std::string& response);
 
 		class ClientLimitReachedException: public std::exception
 		{	const char *what () const throw ();	};
