@@ -29,15 +29,12 @@ Command* parseCommand(const std::string& input) {
     std::string token;
     std::vector<std::string> params;
 
-    // Extract command type
     if (!(iss >> cmdType)) {
         throw std::invalid_argument("Invalid command: empty input");
     }
 
-    // Convert to uppercase for case-insensitive comparison
     std::transform(cmdType.begin(), cmdType.end(), cmdType.begin(), toUpperChar);
 
-    // Extract parameters
     while (iss >> token) {
         // Handle parameters that start with ':' (trailing parameter)
         if (token[0] == ':') {
@@ -74,12 +71,21 @@ Command* parseCommand(const std::string& input) {
         std::string topic = params.size() > 1 ? params[1] : "";
         return new TopicCommand(params[0], topic);
     } else if (cmdType == "MODE") {
-        // MODE <channel> <mode> [<mode params>]
-        if (params.size() < 2) {
-            throw std::invalid_argument("MODE command requires at least 2 parameters: <channel> <mode>");
+        // MODE <target> [<modestring> [<mode params>...]]
+        if (params.size() < 1) {
+            throw std::invalid_argument("MODE command requires at least 1 parameter: <target>");
         }
-        std::string modeParams = params.size() > 2 ? params[2] : "";
-        return new ModeCommand(params[0], params[1], modeParams);
+
+        std::string target = params[0];
+        std::string modeString = params.size() > 1 ? params[1] : "";
+
+        std::string modeParams = "";
+        for (size_t i = 2; i < params.size(); i++) {
+            if (i > 2) modeParams += " ";
+            modeParams += params[i];
+        }
+
+        return new ModeCommand(target, modeString, modeParams);
     } else if (cmdType == "CAP") {
         // CAP <subcommand> [<capabilities>]
         if (params.size() < 1) {
@@ -88,12 +94,30 @@ Command* parseCommand(const std::string& input) {
         std::string capabilities = params.size() > 1 ? params[1] : "";
         return new CapCommand(params[0], capabilities);
     } else if (cmdType == "JOIN") {
-        // JOIN <channel> [<key>]
+        // JOIN <channel>{,<channel>} [<key>{,<key>}]
         if (params.size() < 1) {
             throw std::invalid_argument("JOIN command requires at least 1 parameter: <channel>");
         }
-        std::string key = params.size() > 1 ? params[1] : "";
-        return new JoinCommand(params[0], key);
+
+        std::vector<std::string> channels;
+        std::istringstream channelStream(params[0]);
+        std::string channel;
+        while (std::getline(channelStream, channel, ',')) {
+            if (!channel.empty()) {
+                channels.push_back(channel);
+            }
+        }
+
+        std::vector<std::string> keys;
+        if (params.size() > 1) {
+            std::istringstream keyStream(params[1]);
+            std::string key;
+            while (std::getline(keyStream, key, ',')) {
+                keys.push_back(key);  // Empty keys are allowed
+            }
+        }
+
+        return new JoinCommand(channels, keys);
     } else if (cmdType == "PRIVMSG") {
         // PRIVMSG <target> <message>
         if (params.size() < 2) {
@@ -107,12 +131,22 @@ Command* parseCommand(const std::string& input) {
         }
         return new PingCommand(params[0]);
     } else if (cmdType == "PART") {
-        // PART <channel> [<reason>]
+        // PART <channel>{,<channel>} [<reason>]
         if (params.size() < 1) {
             throw std::invalid_argument("PART command requires at least 1 parameter: <channel>");
         }
+
+        std::vector<std::string> channels;
+        std::istringstream channelStream(params[0]);
+        std::string channel;
+        while (std::getline(channelStream, channel, ',')) {
+            if (!channel.empty()) {
+                channels.push_back(channel);
+            }
+        }
+
         std::string reason = params.size() > 1 ? params[1] : "";
-        return new PartCommand(params[0], reason);
+        return new PartCommand(channels, reason);
     } else if (cmdType == "QUIT") {
         // QUIT [<message>]
         std::string message = params.size() > 0 ? params[0] : "";

@@ -1,5 +1,4 @@
-#ifndef QUITCOMMAND_HPP
-#define QUITCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
@@ -9,10 +8,12 @@ private:
     std::string message;
 
 public:
-    QuitCommand(const std::string& msg = "");
-    virtual ~QuitCommand();
+    QuitCommand();
+    QuitCommand(const std::string& msg);
+    QuitCommand(const QuitCommand& other);
+    QuitCommand& operator=(const QuitCommand& other);
+    ~QuitCommand();
 
     std::string getMessage() const;
+    void response(Client &client, Server &server);
 };
-
-#endif

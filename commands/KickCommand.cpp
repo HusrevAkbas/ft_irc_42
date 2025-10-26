@@ -1,16 +1,23 @@
 #include "KickCommand.hpp"
 
-KickCommand::KickCommand() {} //default constructor is needed for Command class
+KickCommand::KickCommand() : Command("KICK") {}
+
 
 KickCommand::KickCommand(const std::string& channel, const std::string& target, const std::string& reason)
     : Command("KICK"), _channel(channel), _target(target), _reason(reason) {}
 
-KickCommand::KickCommand(const KickCommand &source) {
+KickCommand::KickCommand(const KickCommand &source) : Command("KICK") {
     *this = source;
 }
 
 KickCommand&    KickCommand::operator=(const KickCommand &source) {
-    if (this != &source)
+    if (this != &source) {
+        Command::operator=(source);
+        _channel = source._channel;
+        _target = source._target;
+        _reason = source._reason;
+    }
+    return *this;
 }
 
 KickCommand::~KickCommand() {}
@@ -105,4 +112,18 @@ void    KickCommand::execute(Server& server, Client& client) {
         return;
     }
 
+}
+
+void KickCommand::response(Client &client, Server &server)
+{
+    // TODO: implement
+    (void)server;
+    (void)client;
+}
+
+void KickCommand::response(Client &client, Server &server)
+{
+    // TODO: implement
+    (void)server;
+    (void)client;
 }

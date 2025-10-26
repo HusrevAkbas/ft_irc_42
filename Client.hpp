@@ -45,6 +45,11 @@ class Client
 		time_t					getTimestamp();
 
 		void	removeChannel(Channel* channel);
-	};
+		std::vector<Channel *>	getChannels() const;
+
+		void	addChannel(Channel *channel);
+		void	removeChannel(Channel *channel);
+		bool	isInChannel(Channel *channel) const;
+};
 
 void	checkConnection(std::string input, Client &client);

@@ -1,5 +1,4 @@
-#ifndef KICKCOMMAND_HPP
-#define KICKCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include "Server.hpp"
@@ -22,6 +21,7 @@ public:
     std::string getChannel() const;
     std::string getTarget() const;
     std::string getReason() const;
+    void response(Client &client, Server &server);
 
     void    setChannel(const std::string& channel);
     void    setTarget(const std::string& target);
@@ -31,5 +31,3 @@ public:
     Client* findOperator(const std::string& client, Channel* channel);
     void    execute(Server& server, Client& client);
 };
-
-#endif

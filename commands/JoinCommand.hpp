@@ -1,20 +1,27 @@
-#ifndef JOINCOMMAND_HPP
-#define JOINCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
+#include <vector>
 
 class JoinCommand : public Command {
 private:
-    std::string channel;
-    std::string key;
+    std::vector<std::string> channels;
+    std::vector<std::string> keys;
 
 public:
-    JoinCommand(const std::string& chan, const std::string& k = "");
-    virtual ~JoinCommand();
+    JoinCommand();
+    JoinCommand(const std::vector<std::string>& chans, const std::vector<std::string>& keys);
+    JoinCommand(const JoinCommand& other);
+    JoinCommand& operator=(const JoinCommand& other);
+    ~JoinCommand();
 
-    std::string getChannel() const;
-    std::string getKey() const;
+    std::vector<std::string> getChannels() const;
+    std::vector<std::string> getKeys() const;
+    void response(Client &client, Server &server);
+
+private:
+    std::string joinSingleChannel(Server &server, Client &client,
+                                   const std::string& channelName,
+                                   const std::string& key);
 };
-
-#endif

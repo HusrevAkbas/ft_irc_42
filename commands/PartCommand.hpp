@@ -1,20 +1,26 @@
-#ifndef PARTCOMMAND_HPP
-#define PARTCOMMAND_HPP
+#pragma once
 
 #include "Command.hpp"
 #include <string>
+#include <vector>
 
 class PartCommand : public Command {
 private:
-    std::string channel;
+    std::vector<std::string> channels;
     std::string reason;
 
 public:
-    PartCommand(const std::string& chan, const std::string& r = "");
+    PartCommand();
+    PartCommand(const std::vector<std::string>& chans, const std::string& r);
+    PartCommand(const PartCommand& other);
+    PartCommand& operator=(const PartCommand& other);
     virtual ~PartCommand();
 
-    std::string getChannel() const;
+    std::vector<std::string> getChannels() const;
     std::string getReason() const;
-};
+    void response(Client &client, Server &server);
 
-#endif
+private:
+    std::string partSingleChannel(Server &server, Client &client,
+                                   const std::string& channelName);
+};

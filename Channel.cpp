@@ -1,6 +1,11 @@
 #include "Channel.hpp"
+#include "Client.hpp"
 
-Channel::Channel() {}
+Channel::Channel() : _i_inviteOnly(false), _t_topicSetable(false), _k_usePassword(false), _l_userLimit(0)
+{}
+
+Channel::Channel(const std::string &name) : _name(name), _i_inviteOnly(false), _t_topicSetable(false), _k_usePassword(false), _l_userLimit(0)
+{}
 
 Channel::~Channel() {}
 
@@ -72,4 +77,103 @@ std::vector<Client *>	Channel::getOperators() const
 std::vector<Client *>	Channel::getClients() const
 {
 	return (this->_clients);
+}
+
+void	Channel::setName(const std::string &name)
+{
+	this->_name = name;
+}
+
+void	Channel::setPassword(const std::string &pass)
+{
+	this->_password = pass;
+}
+
+void	Channel::setTopic(const std::string &topic)
+{
+	this->_topic = topic;
+}
+
+void	Channel::setInviteOnly(bool status)
+{
+	this->_i_inviteOnly = status;
+}
+
+void	Channel::setTopicSetable(bool status)
+{
+	this->_t_topicSetable = status;
+}
+
+void	Channel::setUsePassword(bool status)
+{
+	this->_k_usePassword = status;
+}
+
+void	Channel::setUserLimit(int limit)
+{
+	this->_l_userLimit = limit;
+}
+
+void	Channel::addClient(Client &client)
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->_clients[i] == &client)
+			return;
+	}
+	this->_clients.push_back(&client);
+}
+
+void	Channel::addOperator(Client &client)
+{
+	for (size_t i = 0; i < this->_operators.size(); i++)
+	{
+		if (this->_operators[i] == &client)
+			return;
+	}
+	this->_operators.push_back(&client);
+}
+
+void	Channel::removeClient(Client &client)
+{
+	for (std::vector<Client *>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (*it == &client)
+		{
+			this->_clients.erase(it);
+			return;
+		}
+	}
+}
+
+void	Channel::removeOperator(Client &client)
+{
+	for (std::vector<Client *>::iterator it = this->_operators.begin(); it != this->_operators.end(); ++it)
+	{
+		if (*it == &client)
+		{
+			this->_operators.erase(it);
+			return;
+		}
+	}
+}
+
+bool	Channel::isClientInChannel(Client &client) const
+{
+	for (size_t i = 0; i < this->_clients.size(); i++)
+	{
+		if (this->_clients[i] == &client)
+			return true;
+	}
+	return false;
+}
+
+bool	Channel::isOperator(Client &client) const
+{
+	for (size_t i = 0; i < this->_operators.size(); i++)
+	{
+		if (this->_operators[i] == &client)
+			return true;
+	}
+	return false;
 }

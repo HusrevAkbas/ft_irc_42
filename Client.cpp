@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
 Client::Client() : _socketFd(-1) {}
 
@@ -85,6 +86,7 @@ void	Client::setSocketFd(int fd)
 void	Client::setConnected(int status)
 {	this->_connected = status;	}
 
+
 void	Client::setChannelLimit(int limit) {
 	_channelLimit = limit;
 }
@@ -92,6 +94,34 @@ void	Client::setChannelLimit(int limit) {
 void	Client::setTimestamp(time_t time) {
 	_timestamp = time;
 }
+
+
+bool	Client::isInChannel(Channel *channel) const
+{
+	if (!channel)
+		return false;
+
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i] == channel)
+			return true;
+	}
+	return false;
+}
+
+void	Client::addChannel(Channel *channel)
+{
+	if (!channel)
+		return;
+
+	for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i] == channel)
+			return;
+	}
+	this->_channels.push_back(channel);
+}
+
 
 void	Client::removeChannel(Channel* channel) {
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
