@@ -43,24 +43,24 @@ std::string	Client::getNickname() const
 std::string	Client::getUsername() const
 {	return (this->_username);	}
 
-epoll_event	Client::getEvent()
+epoll_event	Client::getEvent() const
 {	return (this->_event);	}
 
-std::vector<Channel *>	Client::getChannels() {
+std::vector<Channel *>	Client::getChannels() const {
 	return _channels;
 }
 
 int	Client::getSocketFd() const
 {	return (this->_socketFd);	}
 
-int	Client::getConnected()
+int	Client::getConnected() const
 {	return (this->_connected);	}
 
-int	Client::getChannelLimit() {
+int	Client::getChannelLimit() const {
 	return _channelLimit;
 }
 
-time_t	Client::getTimestamp() {
+time_t	Client::getTimestamp() const {
 	return _timestamp;
 }
 
@@ -86,7 +86,6 @@ void	Client::setSocketFd(int fd)
 void	Client::setConnected(int status)
 {	this->_connected = status;	}
 
-
 void	Client::setChannelLimit(int limit) {
 	_channelLimit = limit;
 }
@@ -96,18 +95,7 @@ void	Client::setTimestamp(time_t time) {
 }
 
 
-bool	Client::isInChannel(Channel *channel) const
-{
-	if (!channel)
-		return false;
-
-	for (size_t i = 0; i < this->_channels.size(); i++)
-	{
-		if (this->_channels[i] == channel)
-			return true;
-	}
-	return false;
-}
+//METHODS
 
 void	Client::addChannel(Channel *channel)
 {
@@ -122,8 +110,22 @@ void	Client::addChannel(Channel *channel)
 	this->_channels.push_back(channel);
 }
 
+bool	Client::isInChannel(Channel *channel) const
+{
+	if (!channel)
+		return false;
 
+		for (size_t i = 0; i < this->_channels.size(); i++)
+	{
+		if (this->_channels[i] == channel)
+			return true;
+	}
+	return false;
+}
+		
 void	Client::removeChannel(Channel* channel) {
+	if (!channel)
+		return;
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		if (*it == channel) {
 			_channels.erase(it);

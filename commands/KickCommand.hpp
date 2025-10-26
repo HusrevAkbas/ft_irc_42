@@ -21,13 +21,14 @@ public:
     std::string getChannel() const;
     std::string getTarget() const;
     std::string getReason() const;
-    void response(Client &client, Server &server);
-
+    
     void    setChannel(const std::string& channel);
     void    setTarget(const std::string& target);
     void    setReason(const std::string& reason);
-
+    
     Client* findClient(const std::string& client, Channel* channel);
-    Client* findOperator(const std::string& client, Channel* channel);
+    // Client* findOperator(const std::string& client, Channel* channel);
+    void    checkReason();
     void    execute(Server& server, Client& client);
+    void    response(Client &client, Server &server);
 };

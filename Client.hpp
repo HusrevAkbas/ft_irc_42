@@ -15,6 +15,7 @@ class Client
 		int						_connected;
 		int						_channelLimit;
 		time_t					_timestamp;
+
 	public:
 		Client();
 		Client(int fd);
@@ -37,19 +38,16 @@ class Client
 
 		std::string				getNickname() const;
 		std::string				getUsername() const;
-		epoll_event				getEvent();
-		std::vector<Channel *>	getChannels();
-		int						getSocketFd() const;
-		int						getConnected();
-		int						getChannelLimit();
-		time_t					getTimestamp();
-
-		void	removeChannel(Channel* channel);
+		epoll_event				getEvent() const;
 		std::vector<Channel *>	getChannels() const;
+		int						getSocketFd() const;
+		int						getConnected() const;
+		int						getChannelLimit() const;
+		time_t					getTimestamp() const;
 
-		void	addChannel(Channel *channel);
-		void	removeChannel(Channel *channel);
 		bool	isInChannel(Channel *channel) const;
+		void	addChannel(Channel *channel);
+		void	removeChannel(Channel* channel);
 };
 
 void	checkConnection(std::string input, Client &client);
