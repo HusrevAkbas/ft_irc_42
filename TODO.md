@@ -58,6 +58,7 @@ Classes
 	new commands:
 		WHO - client sends when he joins a channel
 		WHOIS - not sure, saw it before but dont remember when we get this command
+		LUSERS - we send number of clients, channels and some statistics
 
 ISSUES:
 	27.10.2025:

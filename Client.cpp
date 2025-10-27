@@ -1,11 +1,20 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-Client::Client() : _socketFd(-1) {}
+Client::Client() : _socketFd(-1), _connected(0)
+{
+	this->_timestamp = std::time(0);
+}
 
-Client::Client(int fd) : _socketFd(fd) {}
+Client::Client(int fd) : _socketFd(fd), _connected(0)
+{
+	this->_timestamp = std::time(0);
+}
 
-Client::Client(std::string nick, int fd, epoll_event event) : _nickname(nick), _socketFd(fd), _event(event) {}
+Client::Client(std::string nick, int fd, epoll_event event) : _nickname(nick), _socketFd(fd), _event(event)
+{
+	this->_timestamp = std::time(0);
+}
 
 Client::~Client() {}
 

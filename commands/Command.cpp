@@ -116,5 +116,7 @@ std::string Command::buildNumericReplyNoColon(Server &server, Client &client,
 */
 void    Command::response(Client &client, Server &server)
 {
+    (void) client;
+    (void) server;
     std::cout << YELLOW << "Command: " << RESET << this->type << "\n";
 }

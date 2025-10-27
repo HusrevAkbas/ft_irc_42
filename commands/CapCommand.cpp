@@ -79,5 +79,12 @@ void    CapCommand::response(Client &client, Server &server)
         message += " STATUSMSG=@+ TOPICLEN=510 USERLEN=64 SAFELIST";
         response = Command::buildNumericReply(server, client, RPL_ISUPPORT, message, "are supported by this server");
         server.sendResponse(client, response);
+        // a response as if client send LUSER
+        // MOTD message of the day
+        message = "There is no MOTD yet";
+        response = Command::buildNumericReply(server, client, ERR_NOMOTD, message);
+        server.sendResponse(client, response);
+        // 221 u_modeis
+        response = Command::buildNumericReplyNoColon(server, client, RPL_UMODEIS, "+i", "");
     }
 }

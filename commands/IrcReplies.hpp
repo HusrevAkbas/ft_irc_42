@@ -8,6 +8,9 @@ enum IrcReply {
     RPL_CREATED         = 3,
     RPL_MYINFO          = 4,
     RPL_ISUPPORT        = 5,
+
+    RPL_UMODEIS         = 221,
+
     RPL_CHANNELMODEIS   = 324,
     RPL_NOTOPIC         = 331,
     RPL_TOPIC           = 332,
@@ -16,6 +19,7 @@ enum IrcReply {
 
     ERR_NOSUCHCHANNEL       = 403,
     ERR_TOOMANYCHANNELS     = 405,
+    ERR_NOMOTD              = 422,
     ERR_NONICKNAMEGIVEN     = 431,
     ERR_NICKNAMEINUSE       = 433,
     ERR_NOTONCHANNEL        = 442,

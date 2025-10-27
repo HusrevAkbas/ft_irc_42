@@ -12,7 +12,7 @@ class Client
 		epoll_event	_event;
 		int			_connected;
 		std::vector<Channel *>	_channels;
-		int			_channelLimit;
+		// int			_channelLimit;
 		time_t		_timestamp;
 		std::string	_username;
 		std::string	_hostname;

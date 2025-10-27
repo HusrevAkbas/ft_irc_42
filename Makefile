@@ -1,4 +1,4 @@
-CFLAGS		=	-std=c++98 -MMD -MP# -Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 COMPILER	=	c++
 
