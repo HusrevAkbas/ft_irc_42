@@ -17,6 +17,7 @@ class Channel
 		bool		_k_usePassword;
 		int			_l_userLimit;
 		time_t		_timestamp;
+		int			_inviteList;
 	public:
 		Channel();
 		Channel(const std::string &name);
@@ -38,6 +39,7 @@ class Channel
 		int		getUserLimit() const;
 		std::vector<Client *>	getOperators() const;
 		std::vector<Client *>	getClients() const;
+		int		getInviteList() const;
 
 		void	setName(const std::string &name);
 		void	setPassword(const std::string &pass);
@@ -49,6 +51,7 @@ class Channel
 
 		void	addClient(Client &client);
 		void	addOperator(Client &client);
+		void	addInviteList(int newInvite);
 		void	removeClient(Client &client);
 		void	removeOperator(Client &client);
 		bool	isClientInChannel(Client &client) const;

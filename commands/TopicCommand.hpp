@@ -5,17 +5,20 @@
 
 class TopicCommand : public Command {
 private:
-    std::string channel;
-    std::string topic;
+    std::string _channel;
+    std::string _topic;
 
 public:
     TopicCommand();
-    TopicCommand(const std::string& chan, const std::string& top);
+    TopicCommand(const std::string& channel, const std::string& topic);
     TopicCommand(const TopicCommand& other);
     TopicCommand& operator=(const TopicCommand& other);
     ~TopicCommand();
 
-    std::string getChannel() const;
     std::string getTopic() const;
-    void response(Client &client, Server &server);
+    std::string getChannel() const;
+    // std::string getTopic() const;
+
+    void        execute(Server& server, Client& client);
+    void        response(Client &client, Server &server);
 };
