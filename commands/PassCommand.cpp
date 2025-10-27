@@ -25,7 +25,24 @@ std::string PassCommand::getPassword() const {
 
 void PassCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    (void)server;
-    (void)client;
+    std::string response;
+
+    if (client.getConnected())
+    {
+        response = Command::buildNumericReply(server, client, ERR_ALREADYREGISTERED, "You are already registered");
+    }
+    else if (this->password.empty())
+    {
+        response = Command::buildNumericReply(server, client, ERR_NEEDMOREPARAMS, "You must provide password");
+        server.sendResponse(client, response);
+    }
+    else
+    {
+        // TODO set client password, check password match on CAP END
+        if (server.getPass() != this->password)
+        {
+            response = Command::buildNumericReply(server, client, ERR_PASSWDMISMATCH, "Wrong password mate");
+            server.sendResponse(client, response);
+        }
+    }
 }

@@ -58,7 +58,6 @@ Classes
 	new commands:
 		WHO - client sends when he joins a channel
 		WHOIS - not sure, saw it before but dont remember when we get this command
-		AUTHENTICATE - it might be the authentication mentioned in subject
 
 ISSUES:
 	27.10.2025:
@@ -70,7 +69,8 @@ ISSUES:
 	2- USER command send 4 information depends on RFC standards. irssi in campus computers sends: <username> <hostname> <servername> <realname>
 	we should parse all parts and save in client class.
 	current: Hüsrev commended out the part checks for second and third parameter in command parser
-	expected: we should have 4 attributes for all 4 infos in our Client class to store. i skip this step for now
+	expected: we should have 4 attributes for all 4 infos in our Client class to store. i skip this step for now. Can you add attributes to Client?
+		username, hostname, servername, realname, password
 
 	3- After joining a channel, if we send PART command, we have a crash. Logs are here:
 
@@ -100,3 +100,5 @@ ISSUES:
 		zsh: IOT instruction (core dumped)  ./ircserv 3333 SAFEME
 
 	4- As you see above, when we join a channel, client sends two more commands automatically. MODE #channel and WHO #channel. we also need to implement WHO
+
+	5- client wants to change usermod with MODE user +i, but we handle only channel modes.

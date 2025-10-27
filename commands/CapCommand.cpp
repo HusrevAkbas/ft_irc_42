@@ -51,7 +51,7 @@ void    CapCommand::response(Client &client, Server &server)
         server.sendResponse(client, response);
         //  002 yourhost
         message = "Your host is ";
-        message.append(server.getName()).append(", version: 1.2.3");
+        message.append(server.getName()).append(", version 1.2.3");
         response = Command::buildNumericReply(server,client, RPL_YOURHOST, message);
         server.sendResponse(client, response);
         //  003 created
@@ -62,8 +62,8 @@ void    CapCommand::response(Client &client, Server &server)
         server.sendResponse(client, response);
         //  004 myinfo
         message = "";
-        message.append(server.getName()).append(" v:1.2.3").append( " +o +itkol");
-        response = Command::buildNumericReply(server,client, RPL_MYINFO, message, "");
+        message.append(server.getName()).append(" v-1.2.3");
+        response = Command::buildNumericReplyNoColon(server,client, RPL_MYINFO, message, "");
         server.sendResponse(client, response);
         //  005 isupport
         message = "CASEMAPPING=ascii CHANLIMIT=#:25 CHANMODES=,o,kl,it PREFIX=(ov)@+";
