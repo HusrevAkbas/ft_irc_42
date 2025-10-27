@@ -60,7 +60,7 @@ Client* KickCommand::findClient(const std::string& client, Channel* channel) {
     std::vector<Client *>   clients = channel->getClients();
 
     for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
-        if ((*it)->getNickname() == client) {
+        if ((*it)->getUsername() == client) {
             return *it;
         }
     }
@@ -131,15 +131,15 @@ void    KickCommand::execute(Server& server, Client& client) {
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
-
-    //remove target from channel
-    channel->removeClient(*target);
-    target->removeChannel(channel);
-
+    
     //broadcast :sender KICK #channel target :reason
     checkReason();
     std::string response = client.getUsername() + " KICK " + _channel + _target + " :" + _reason;
     send(client.getSocketFd(), response.c_str(), response.length(), 0);
+    
+    //remove target from channel
+    channel->removeClient(*target);
+    target->removeChannel(channel);
 
 }
 

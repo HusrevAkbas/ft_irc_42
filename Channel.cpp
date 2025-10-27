@@ -79,6 +79,10 @@ std::vector<Client *>	Channel::getClients() const
 	return (this->_clients);
 }
 
+int	Channel::getInviteList() const {
+	return _inviteList;
+}
+
 void	Channel::setName(const std::string &name)
 {
 	this->_name = name;
@@ -132,6 +136,10 @@ void	Channel::addOperator(Client &client)
 			return;
 	}
 	this->_operators.push_back(&client);
+}
+
+void	Channel::addInviteList(int newInvite) {
+	_inviteList += newInvite;
 }
 
 void	Channel::removeClient(Client &client)
