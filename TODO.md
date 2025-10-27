@@ -49,24 +49,54 @@ Classes
 		JOIN
 		PRIVMSG
 		PING
-		LEAVE
+		LEAVE -> PART
 		QUIT
 		NICK
 		PASS
 		USER
 
-		WHO
+	new commands:
+		WHO - client sends when he joins a channel
+		WHOIS - not sure, saw it before but dont remember when we get this command
+		AUTHENTICATE - it might be the authentication mentioned in subject
 
 ISSUES:
-	23.10.2025:
+	27.10.2025:
 
 	1- We should send response messages in case of missing arguments
 	current: we throw an exception in case of wrong number of arguments
 	expected: throw exception only if command is invalid, not supported
 
-	2- USER command send 4 information depends on RFC standards
-		<username> <hostname> <servername> <realname>
-	OR	<username> <mode> <unused> <realname>.
-	we should parse all parts
-	current: Hüsrev commended out the part checks for second and third parameter
-	expected: we should have 4 attributes in our Client class to store these infos
+	2- USER command send 4 information depends on RFC standards. irssi in campus computers sends: <username> <hostname> <servername> <realname>
+	we should parse all parts and save in client class.
+	current: Hüsrev commended out the part checks for second and third parameter in command parser
+	expected: we should have 4 attributes for all 4 infos in our Client class to store. i skip this step for now
+
+	3- After joining a channel, if we send PART command, we have a crash. Logs are here:
+
+		c3r9p6% ./ircserv 3333 SAFEME
+		Server name: ircserv42
+		Password: SAFEME
+		Ip: 0.0.0.0
+		Port: 3333
+		Clients: 0
+		Channels: 0
+		Created at: Mon Oct 27 12:57:01 2025
+		---REQUEST---: CAP LS
+		---REQUEST---: PASS SAFEME
+		---REQUEST---: NICK irssiUser
+		---REQUEST---: USER huakbas huakbas 127.0.0.1 :Husrev Akbas
+		---REQUEST---: CAP END
+		---REQUEST---: MODE irssiUser +i
+		---REQUEST---: PING ircserv42
+		---REQUEST---: JOIN #cafe
+		---REQUEST---: MODE #cafe
+		---REQUEST---: WHO #cafe
+		Exception catched in Server::handleRequest:
+		std::exception
+		---REQUEST---: PING ircserv42
+		---REQUEST---: PART #cafe
+		free(): double free detected in tcache 2
+		zsh: IOT instruction (core dumped)  ./ircserv 3333 SAFEME
+
+	4- As you see above, when we join a channel, client sends two more commands automatically. MODE #channel and WHO #channel. we also need to implement WHO

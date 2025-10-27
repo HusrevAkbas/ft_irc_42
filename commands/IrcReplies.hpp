@@ -16,6 +16,7 @@ enum IrcReply {
 
     ERR_NOSUCHCHANNEL       = 403,
     ERR_TOOMANYCHANNELS     = 405,
+    ERR_NONICKNAMEGIVEN     = 431,
     ERR_NICKNAMEINUSE       = 433,
     ERR_NOTONCHANNEL        = 442,
     ERR_NEEDMOREPARAMS      = 461,

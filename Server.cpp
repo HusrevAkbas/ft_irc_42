@@ -228,6 +228,7 @@ void	Server::handleRequest(std::string input, int fd)
 
 void Server::sendResponse(Client &client, const std::string& response)
 {
+	// std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
 	send(client.getSocketFd(), response.c_str(), response.length(), 0);
 }
 
