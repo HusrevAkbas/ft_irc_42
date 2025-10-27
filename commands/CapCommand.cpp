@@ -42,6 +42,7 @@ void    CapCommand::response(Client &client, Server &server)
     }
     if (this->subcommand == "END")
     {
+        // TODO check password match here
         client.setConnected(1);
         //  send greet messages
         //  001 welcome

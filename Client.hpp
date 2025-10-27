@@ -14,6 +14,12 @@ class Client
 		std::vector<Channel *>	_channels;
 		int			_channelLimit;
 		time_t		_timestamp;
+		std::string	_username;
+		std::string	_hostname;
+		std::string	_networkname;
+		std::string	_realname;
+		std::string	_password;
+
 	public:
 		Client();
 		Client(int fd);
@@ -34,6 +40,16 @@ class Client
 		int		getConnected();
 		void	setConnected(int status);
 		std::vector<Channel *>	getChannels() const;
+		std::string	getUsername() const;
+		std::string	getHostname() const;
+		std::string	getNetworkname() const;
+		std::string	getRealname() const;
+		std::string	getPassword() const;
+		void setUsername(std::string getUsername);
+		void setHostname(std::string getHostname);
+		void setNetworkname(std::string getNetworkname);
+		void setRealname(std::string getRealname);
+		void setPassword(std::string getPassword);
 
 		void	addChannel(Channel *channel);
 		void	removeChannel(Channel *channel);

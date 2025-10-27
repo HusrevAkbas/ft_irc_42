@@ -56,8 +56,42 @@ void	Client::setConnected(int status)
 {	this->_connected = status;	}
 
 std::vector<Channel *>	Client::getChannels() const
+{	return (this->_channels);	}
+
+std::string	Client::getUsername() const
+{	return (this->_username);	}
+
+std::string	Client::getHostname() const
+{	return (this->_hostname);	}
+
+std::string	Client::getNetworkname() const
+{	return (this->_networkname);	}
+
+std::string	Client::getRealname() const
+{	return (this->_realname);	}
+
+std::string	Client::getPassword() const
+{	return (this->_password);	}
+
+void	Client::setUsername(std::string username)
 {
-	return (this->_channels);
+	this->_username = username;
+}
+void	Client::setHostname(std::string hostname)
+{
+	this->_hostname = hostname;
+}
+void	Client::setNetworkname(std::string networkname)
+{
+	this->_networkname = networkname;
+}
+void	Client::setRealname(std::string realname)
+{
+	this->_realname = realname;
+}
+void	Client::setPassword(std::string password)
+{
+	this->_password = password;
 }
 
 void	Client::addChannel(Channel *channel)
