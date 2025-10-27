@@ -30,5 +30,5 @@ void PingCommand::response(Client &client, Server &server)
 
     response += this->getServer();
     response += "\r\n";
-    send(client.getSocketFd(), response.c_str(), response.length(), 0);
+    server.sendResponse(client, response);
 }
