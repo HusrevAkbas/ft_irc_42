@@ -102,3 +102,5 @@ ISSUES:
 	4- As you see above, when we join a channel, client sends two more commands automatically. MODE #channel and WHO #channel. we also need to implement WHO
 
 	5- client wants to change usermod with MODE user +i, but we handle only channel modes.
+
+	6- if there are many clients connected, PING command or PONG message causes segfault

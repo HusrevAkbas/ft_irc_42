@@ -42,7 +42,14 @@ void    CapCommand::response(Client &client, Server &server)
     }
     if (this->subcommand == "END")
     {
-        // TODO check password match here
+        if (server.getPass() != client.getPassword())
+        {
+            response = buildNumericReply(server, client, ERR_PASSWDMISMATCH, "Wrong password mate!");
+            server.sendResponse(client, response);
+            sleep(1); // TODO wait enough until client gets the response
+            server.removeClient(&client);
+            return ;
+        }
         client.setConnected(1);
         //  send greet messages
         //  001 welcome
