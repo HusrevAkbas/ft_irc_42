@@ -33,12 +33,12 @@ std::string InviteCommand::getChannel() const {
 
 bool    InviteCommand::checkParams(Client& client) {
     if (_nickname.empty()) {
-        std::string err = client.getUsername() + " KICK :Not enough parameters\n";
+        std::string err = client.getUsername() + " KICK :Not enough parameters\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return false;
     }
     if (_channel.empty()) {
-        std::string err = client.getUsername() + " KICK :Not enough parameters\n";
+        std::string err = client.getUsername() + " KICK :Not enough parameters\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return false;
     }
@@ -66,7 +66,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
     Channel* channel = server.findChannelByName(_channel);
     if (!channel) {
         //ERR_NOSUCHCHANNEL (403)
-        std::string err = client.getUsername() + " " + _channel + " :No such channel\n";
+        std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
@@ -76,7 +76,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
         //check whether user is operator
         if (!channel->isOperator(client)) {
             //ERR_CHANOPRIVSNEEDED (482)
-            std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\n";
+            std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
             send(client.getSocketFd(), err.c_str(), err.length(), 0);
             return;
         }
@@ -86,7 +86,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
         //check whether client is in channel
         if (!channel->isClientInChannel(client)) {
             //ERR_NOTONCHANNEL (442)
-            std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\n";
+            std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
             send(client.getSocketFd(), err.c_str(), err.length(), 0);
             return;
         }
@@ -96,19 +96,20 @@ void    InviteCommand::execute(Server& server, Client& client) {
     Client* clientB = findUser(_nickname, channel);
     if (!clientB) {
         //ERR_USERONCHANNEL (443)
-        std::string err = client.getUsername() + " " + _nickname + " " + _channel + " :is already on channel\n";
+        std::string err = client.getUsername() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
 
     //send invite to user
-    std::string response = client.getUsername() + " invites you to #" + _channel;
+    std::string response = client.getUsername() + " invites you to " + _channel;
     send(clientB->getSocketFd(), response.c_str(), response.length(), 0);
 }
 
 void InviteCommand::response(Client &client, Server &server)
 {
     // TODO: implement
-    (void)server;
-    (void)client;
+    // (void)server;
+    // (void)client;
+    execute(server, client);
 }

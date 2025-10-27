@@ -101,7 +101,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     if (!channel) {
 //      ERR_NOSUCHCHANNEL (403) 
 //      "<client> <channel> :No such channel"
-        std::string err = client.getUsername() + " " + _channel + " :No such channel\n";
+        std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return; 
     }
@@ -110,14 +110,14 @@ void    KickCommand::execute(Server& server, Client& client) {
 	if (!channel->isClientInChannel(client)) {
 // 		ERR_NOTONCHANNEL (442) 
 //		"<client> <channel> :You're not on that channel"
-		std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\n";
+		std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
 	}
     
     //check whether sender is operator
     if (!channel->isOperator(client)) {
 //      ERR_CHANOPRIVSNEEDED (482) 
 //      "<client> <channel> :You're not channel operator"
-        std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\n";
+        std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
@@ -127,7 +127,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     if (!target) {
 //      ERR_USERNOTINCHANNEL (441) 
 //      "<client> <nick> <channel> :They aren't on that channel"
-        std::string err = client.getUsername() + " " + _target + " " + _channel + " :They aren't on that channel\n";
+        std::string err = client.getUsername() + " " + _target + " " + _channel + " :They aren't on that channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
@@ -146,6 +146,7 @@ void    KickCommand::execute(Server& server, Client& client) {
 void KickCommand::response(Client &client, Server &server)
 {
     // TODO: implement
-    (void)server;
-    (void)client;
+    // (void)server;
+    // (void)client;
+    execute(server, client);
 }

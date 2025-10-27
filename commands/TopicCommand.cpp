@@ -36,7 +36,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     Channel* channel = server.findChannelByName(_channel);
     if (!channel) {
         //ERR_NOSUCHCHANNEL (403)
-        std::string err = client.getUsername() + " " + _channel + " :No such channel\n";
+        std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
@@ -44,7 +44,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     //check whether client is in channel
     if (!channel->isClientInChannel(client)) {
         //ERR_NOTONCHANNEL (442)
-        std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\n";
+        std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return;
     }
@@ -55,12 +55,12 @@ void    TopicCommand::execute(Server& server, Client& client) {
         std::string topic = channel->getTopic();
         if (topic.empty()) {
             //RPL_NOTOPIC (331)
-            std::string response = client.getUsername() + " " + _channel + " :No topic is set\n";
+            std::string response = client.getUsername() + " " + _channel + " :No topic is set\r\n";
             send(client.getSocketFd(), response.c_str(), response.length(), 0);
             return;
         } else {
             //RPL_TOPIC (332)
-            std::string response = client.getUsername() + " " + _channel + " :<" + topic + ">\n";
+            std::string response = client.getUsername() + " " + _channel + " :<" + topic + ">\r\n";
             send(client.getSocketFd(), response.c_str(), response.length(), 0);
             //TO-DO add whotime 
             return;
@@ -91,6 +91,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
 void TopicCommand::response(Client &client, Server &server)
 {
     // TODO: implement
-    (void)server;
-    (void)client;
+    // (void)server;
+    // (void)client;
+    execute(server, client);
 }
