@@ -54,6 +54,11 @@ void NickCommand::response(Client &client, Server &server)
     // set client nickname
     else
     {
+        if (!client.getNickname().empty())
+        {
+            response.append(":").append(client.getNickname()). append(" NICK ").append(this->nickname).append("\r\n");
+            server.sendResponse(client, response);
+        }
         client.setNickname(this->nickname);
     }
 }
