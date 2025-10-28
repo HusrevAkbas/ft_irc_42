@@ -17,6 +17,7 @@ enum IrcReply {
     RPL_NAMREPLY        = 353,
     RPL_ENDOFNAMES      = 366,
 
+    ERR_NOSUCHNICK          = 401,
     ERR_NOSUCHCHANNEL       = 403,
     ERR_TOOMANYCHANNELS     = 405,
     ERR_NOMOTD              = 422,
