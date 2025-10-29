@@ -218,7 +218,7 @@ void	Server::handleRequest(std::string input, int fd)
 			// let command class handle request and then send response
 			command->response(*client, *this);
 		}
-		catch (std::exception e)
+		catch (std::exception &e)
 		{
 			// TODO: output for development, testing and debugging, REMOVE after project is ready
 			std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
