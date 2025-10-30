@@ -27,7 +27,7 @@ public:
     void    setReason(const std::string& reason);
     
     Client* findClient(const std::string& client, Channel* channel);
-    // Client* findOperator(const std::string& client, Channel* channel);
+    //Client* findOperator(const std::string& client, Channel* channel);
     void    checkReason();
     void    execute(Server& server, Client& client);
     void    response(Client &client, Server &server);
