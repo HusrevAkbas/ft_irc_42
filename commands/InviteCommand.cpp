@@ -102,7 +102,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
     }
 
     //send invite to user
-    std::string response = client.getUsername() + " invites you to " + _channel;
+    std::string response = client.getUsername() + " invites you to #" + _channel + "\r\n";
     send(clientB->getSocketFd(), response.c_str(), response.length(), 0);
 }
 

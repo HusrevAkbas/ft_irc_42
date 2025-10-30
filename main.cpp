@@ -176,6 +176,7 @@ int	main(int argc, char **argv)
 				}
 
 				Client	*client = new Client(client_fd);
+				client->setConnected(0); // can be set as default
 				server.addClient(client);
 			}
 			else if (pending[i].events & EPOLLIN)

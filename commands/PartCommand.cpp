@@ -89,7 +89,7 @@ std::string PartCommand::partSingleChannel(Server &server, Client &client,
     if (chan->getClients().empty())
     {
         server.removeChannel(chan);
-        delete chan;
+        // delete chan;
     }
 
     response = partMessage;

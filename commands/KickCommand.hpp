@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Command.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
+// #include "Server.hpp"
+// #include "Client.hpp"
 #include <string>
 
 class KickCommand : public Command {

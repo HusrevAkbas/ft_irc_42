@@ -2,10 +2,14 @@
 #include "Client.hpp"
 
 Channel::Channel() : _i_inviteOnly(false), _t_topicSetable(false), _k_usePassword(false), _l_userLimit(0)
-{}
+{
+	this->_timestamp = std::time(0);
+}
 
 Channel::Channel(const std::string &name) : _name(name), _i_inviteOnly(false), _t_topicSetable(false), _k_usePassword(false), _l_userLimit(0)
-{}
+{
+	this->_timestamp = std::time(0);
+}
 
 Channel::~Channel() {}
 

@@ -5,8 +5,8 @@
 
 class TopicCommand : public Command {
 private:
-    std::string _topic;
     std::string _channel;
+    std::string _topic;
 
 public:
     TopicCommand();
@@ -17,7 +17,7 @@ public:
 
     std::string getTopic() const;
     std::string getChannel() const;
-    std::string getTopic() const;
+    // std::string getTopic() const;
 
     void        execute(Server& server, Client& client);
     void        response(Client &client, Server &server);

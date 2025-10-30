@@ -228,6 +228,7 @@ void	Server::handleRequest(std::string input, int fd)
 
 void Server::sendResponse(Client &client, const std::string& response)
 {
+	// std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
 	send(client.getSocketFd(), response.c_str(), response.length(), 0);
 }
 
@@ -248,8 +249,17 @@ std::ostream&	operator<<(std::ostream& o, Server &server)
 	<< "Password: " << server.getPass() << "\n"
 	<< "Ip: " << inet_ntoa(server.getAddr().sin_addr) << "\n"
 	<< "Port: " << ntohs(server.getAddr().sin_port) << "\n"
-	<< "Clients: " << server.getClients().size() << "\n"
-	<< "Channels: " << server.getChannels().size() << "\n"
-	<< "Created at: " << ctime(&time);
+	<< "Created at: " << ctime(&time)
+	<< "Number of Clients: " << server.getClients().size() << "\n";
+	for (size_t i = 0; i < server.getClients().size(); i++)
+	{
+		o << "\t" << i << ": " << server.getClients()[i]->getNickname() << " "
+		<< server.getClients()[i]->getSocketFd() << "\n";
+	}
+	o << "Number of Channels: " << server.getChannels().size() << "\n";
+	for (size_t i = 0; i < server.getChannels().size(); i++)
+	{
+		o << "\t" << i << ": " << server.getChannels()[i]->getName() << "\n";
+	}
 	return (o);
 }

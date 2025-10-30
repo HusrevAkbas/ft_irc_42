@@ -30,7 +30,15 @@ std::string UserCommand::getRealname() const {
 
 void UserCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    (void)server;
-    (void)client;
+    std::string response;
+
+    if (client.getConnected())
+    {
+        response = Command::buildNumericReply(server, client, ERR_ALREADYREGISTERED, "You are already registered");
+        server.sendResponse(client, response);
+        return ;
+    }
+    // TODO set also hostname and network name
+    client.setUsername(this->username);
+    client.setRealname(this->realname);
 }

@@ -73,7 +73,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     if (channel->getTopicStatus()) {
         //check client is operator
         if (!channel->isOperator(client)) {
-            std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\n";
+            std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
             send(client.getSocketFd(), err.c_str(), err.length(), 0);
             return;
         }
@@ -86,6 +86,8 @@ void    TopicCommand::execute(Server& server, Client& client) {
 
     //change topic
     channel->setTopic(_topic);
+    std::string response = Command::buildNumericReplyNoColon(server, client, RPL_TOPIC, channel->getName(), channel->getTopic());
+    server.sendResponse(client, response);
 }
 
 void TopicCommand::response(Client &client, Server &server)

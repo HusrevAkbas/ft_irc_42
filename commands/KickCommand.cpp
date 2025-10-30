@@ -134,7 +134,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     
     //broadcast :sender KICK #channel target :reason
     checkReason();
-    std::string response = client.getUsername() + " KICK " + _channel + _target + " :" + _reason;
+    std::string response = client.getUsername() + " KICK " + _channel + _target + " :" + _reason + "\r\n";
     send(client.getSocketFd(), response.c_str(), response.length(), 0);
     
     //remove target from channel

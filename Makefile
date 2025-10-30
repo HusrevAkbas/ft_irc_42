@@ -1,4 +1,4 @@
-CFLAGS		=	-std=c++98 -MMD -MP# -Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 COMPILER	=	c++
 
@@ -34,7 +34,8 @@ fclean : clean
 
 re : fclean all
 
+#	port 6667 is standard for plain text, port 6697 is standard for TLS connections
 run : all clean
-	@./$(NAME) 3333 SAFEME
+	@./$(NAME) 6667 SAFEME
 
 .phony : all c clean f fclean re run
