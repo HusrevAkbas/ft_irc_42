@@ -3,6 +3,7 @@
 #include "headers.hpp"
 
 class Client;
+class Server;
 
 class Channel
 {
@@ -56,4 +57,6 @@ class Channel
 		void	removeOperator(Client &client);
 		bool	isClientInChannel(Client &client) const;
 		bool	isOperator(Client &client) const;
+
+		void	broadcast(Client &client, Server &server, std::string &response);
 };

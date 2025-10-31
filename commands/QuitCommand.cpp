@@ -25,7 +25,10 @@ std::string QuitCommand::getMessage() const {
 
 void QuitCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    (void)server;
-    (void)client;
+    std::string response;
+
+    // response.append(":").append(server.getName())
+    // .append(" QUIT :").append(this->message).append("\r\n");
+    // server.sendResponse(client, response);
+    server.removeClient(&client);
 }
