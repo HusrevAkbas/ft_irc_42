@@ -15,9 +15,8 @@ public:
     TopicCommand& operator=(const TopicCommand& other);
     ~TopicCommand();
 
-    std::string getTopic() const;
     std::string getChannel() const;
-    // std::string getTopic() const;
+    std::string getTopic() const;
 
     void        execute(Server& server, Client& client);
     void        response(Client &client, Server &server);

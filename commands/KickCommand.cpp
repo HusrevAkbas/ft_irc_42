@@ -101,7 +101,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     if (!channel) {
 //      ERR_NOSUCHCHANNEL (403) 
 //      "<client> <channel> :No such channel"
-        std::string err = client.getUsername() + " " + _channel + " :No such channel\n";
+        std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
         send(client.getSocketFd(), err.c_str(), err.length(), 0);
         return; 
     }
