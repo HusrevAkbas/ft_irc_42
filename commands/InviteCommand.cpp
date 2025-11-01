@@ -20,6 +20,8 @@ InviteCommand& InviteCommand::operator=(const InviteCommand& other) {
 
 InviteCommand::~InviteCommand() {}
 
+//GETTERS
+
 std::string InviteCommand::getNickname() const {
     return _nickname;
 }
