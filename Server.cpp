@@ -86,8 +86,6 @@ std::vector<Channel *>	Server::getChannels()
 
 std::vector<Client *>::iterator	Server::findClientPos(const Client * client)
 {
-	return this->_clients.begin();
-
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i] == client)
