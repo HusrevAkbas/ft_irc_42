@@ -86,8 +86,6 @@ std::vector<Channel *>	Server::getChannels()
 
 std::vector<Client *>::iterator	Server::findClientPos(const Client * client)
 {
-	return this->_clients.begin();
-
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i] == client)
@@ -218,7 +216,7 @@ void	Server::handleRequest(std::string input, int fd)
 			// let command class handle request and then send response
 			command->response(*client, *this);
 		}
-		catch (std::exception e)
+		catch (std::exception &e)
 		{
 			// TODO: output for development, testing and debugging, REMOVE after project is ready
 			std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
