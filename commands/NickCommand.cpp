@@ -45,6 +45,7 @@ void NickCommand::response(Client &client, Server &server)
         msg = "Nickname is already in use";
         response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
         send(client.getSocketFd(), response.c_str(), response.length(), 0);
+        sleep(2); //TODO find another way to wait until client receive msg
         if (!client.getConnected())
         {
             server.removeClient(server.findClientByFd(client.getSocketFd()));

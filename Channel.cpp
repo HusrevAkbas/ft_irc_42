@@ -1,5 +1,6 @@
 #include "Channel.hpp"
 #include "Client.hpp"
+#include "Server.hpp"
 
 Channel::Channel() : _i_inviteOnly(false), _t_topicSetable(false), _k_usePassword(false), _l_userLimit(0)
 {
@@ -188,4 +189,14 @@ bool	Channel::isOperator(Client &client) const
 			return true;
 	}
 	return false;
+}
+
+
+void	Channel::broadcast(Client &client, Server &server, std::string &response)
+{
+	for (size_t i = 0; i < this->getClients().size(); i++)
+	{
+		if (this->getClients()[i] != &client)
+			server.sendResponse(*this->getClients()[i], response);
+	}
 }

@@ -87,8 +87,6 @@ std::vector<Channel *>	Server::getChannels()
 
 std::vector<Client *>::iterator	Server::findClientPos(const Client * client)
 {
-	return this->_clients.begin();
-
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i] == client)
@@ -253,8 +251,17 @@ void	Server::handleRequest(std::string input, int fd)
 
 void Server::sendResponse(Client &client, const std::string& response)
 {
-	// std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
+	std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
 	send(client.getSocketFd(), response.c_str(), response.length(), 0);
+}
+
+void	Server::broadcast(Client &client, std::string response)
+{
+	for (size_t i = 0; i < this->getClients().size(); i++)
+	{
+		if (this->getClients()[i] != &client)
+			this->sendResponse(*this->getClients()[i], response);
+	}
 }
 
 const char*	Server::ClientLimitReachedException::what() const throw ()

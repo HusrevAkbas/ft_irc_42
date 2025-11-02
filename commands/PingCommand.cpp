@@ -25,7 +25,6 @@ std::string PingCommand::getServer() const {
 
 void PingCommand::response(Client &client, Server &server)
 {
-    (void)server;
     std::string response = "PONG ";
 
     response += this->getServer();

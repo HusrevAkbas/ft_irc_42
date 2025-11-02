@@ -17,9 +17,10 @@ enum IrcReply {
     RPL_NAMREPLY        = 353,
     RPL_ENDOFNAMES      = 366,
 
-    ERR_UNKNOWNCOMMAND      = 421,
+    ERR_NOSUCHNICK          = 401,
     ERR_NOSUCHCHANNEL       = 403,
     ERR_TOOMANYCHANNELS     = 405,
+    ERR_UNKNOWNCOMMAND      = 421,
     ERR_NOMOTD              = 422,
     ERR_NONICKNAMEGIVEN     = 431,
     ERR_NICKNAMEINUSE       = 433,

@@ -25,7 +25,18 @@ std::string QuitCommand::getMessage() const {
 
 void QuitCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    (void)server;
-    (void)client;
+    std::string response;
+
+    response += ":" + client.getNickname() + " QUIT :Quit: ";
+    if (this->message.empty())
+        response += "\r\n";
+    else
+        response += this->message + "\n";
+
+    for (size_t i = 0; i < client.getChannels().size(); i++)
+    {
+        client.getChannels()[i]->broadcast(client, server, response);
+    }
+
+    server.removeClient(&client);
 }

@@ -38,7 +38,7 @@ void PassCommand::response(Client &client, Server &server)
     }
     else
     {
-        // Password check is done in CAP END part
+        // Password check in CAP END part
         client.setPassword(this->password);
     }
 }
