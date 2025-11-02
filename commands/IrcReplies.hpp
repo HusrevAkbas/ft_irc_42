@@ -10,6 +10,9 @@ enum IrcReply {
     RPL_ISUPPORT        = 5,
 
     RPL_UMODEIS         = 221,
+    RPL_LUSERCLIENT     = 251,
+    RPL_LUSERCHANNELS   = 254,
+    RPL_LUSERME         = 255,
 
     RPL_CHANNELMODEIS   = 324,
     RPL_NOTOPIC         = 331,
