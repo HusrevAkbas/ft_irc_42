@@ -14,6 +14,9 @@ enum IrcReply {
     RPL_LUSERCHANNELS   = 254,
     RPL_LUSERME         = 255,
 
+    RPL_LISTSTART       = 321,
+    RPL_LIST            = 322,
+    RPL_LISTEND         = 323,
     RPL_CHANNELMODEIS   = 324,
     RPL_NOTOPIC         = 331,
     RPL_TOPIC           = 332,
