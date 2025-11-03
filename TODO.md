@@ -65,15 +65,15 @@ ISSUES:
 
 	1- We should send response messages in case of missing arguments
 	current: we throw an exception in case of wrong number of arguments
-	expected: throw exception only if command is invalid, not supported
+	expected: throw exception only if command is invalid, not supported(SOLVED)
 
-	2- USER command send 4 information depends on RFC standards. irssi in campus computers sends: <username> <hostname> <servername> <realname>
+	(SOLVED) 2- USER command send 4 information depends on RFC standards. irssi in campus computers sends: <username> <hostname> <servername> <realname>
 	we should parse all parts and save in client class.
 	current: Hüsrev commended out the part checks for second and third parameter in command parser
 	expected: we should have 4 attributes for all 4 infos in our Client class to store. i skip this step for now. Can you add attributes to Client?
-		username, hostname, servername, realname, password
+		username, hostname, servername, realname, password (SOLVED)
 
-	3- After joining a channel, if we send PART command, we have a crash. Logs are here:
+	3- After joining a channel, if we send PART command, we have a crash. Logs are here: (SOLVED)
 
 		c3r9p6% ./ircserv 3333 SAFEME
 		Server name: ircserv42
@@ -100,8 +100,17 @@ ISSUES:
 		free(): double free detected in tcache 2
 		zsh: IOT instruction (core dumped)  ./ircserv 3333 SAFEME
 
-	4- As you see above, when we join a channel, client sends two more commands automatically. MODE #channel and WHO #channel. we also need to implement WHO
+	4- As you see above, when we join a channel, client sends two more commands automatically. MODE #channel and WHO #channel. we also need to implement WHO (SOLVED)
 
-	5- client wants to change usermod with MODE user +i, but we handle only channel modes.
+	5- client wants to change usermod with MODE user +i, but we handle only channel modes.(SOLVED)
 
-	6- if there are many clients connected, PING command or PONG message causes segfault
+	6- if there are many clients connected, PING command or PONG message causes segfault (SOLVED)
+
+	7- Any idea when this is happen ???
+	Irssi: critical nicklist_set_host: assertion 'host != NULL' failed
+
+	8- we see one more ':' in topic when someone joined a channel oksana(JOIN)
+
+	9- Invite/invitelist will be reworked - Ildoko(INVITE)/oksana(JOIN)
+
+	10- Set hostname and server in response hüsrev nick!host@server
