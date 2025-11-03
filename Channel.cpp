@@ -84,7 +84,7 @@ std::vector<Client *>	Channel::getClients() const
 	return (this->_clients);
 }
 
-int	Channel::getInviteList() const {
+std::vector<std::string>	Channel::getInviteList() const {
 	return _inviteList;
 }
 
@@ -143,8 +143,8 @@ void	Channel::addOperator(Client &client)
 	this->_operators.push_back(&client);
 }
 
-void	Channel::addInviteList(int newInvite) {
-	_inviteList += newInvite;
+void	Channel::addInviteList(const std::string& newInvite) {
+	_inviteList.push_back(newInvite);
 }
 
 void	Channel::removeClient(Client &client)
@@ -186,6 +186,14 @@ bool	Channel::isOperator(Client &client) const
 	for (size_t i = 0; i < this->_operators.size(); i++)
 	{
 		if (this->_operators[i] == &client)
+			return true;
+	}
+	return false;
+}
+
+bool	Channel::isNickInInviteList(const std::string& nickname) {
+	for(std::vector<std::string>::iterator it = _inviteList.begin(); it != _inviteList.end(); it++) {
+		if (*it == nickname) 
 			return true;
 	}
 	return false;
