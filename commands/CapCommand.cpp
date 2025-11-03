@@ -42,11 +42,19 @@ void    CapCommand::response(Client &client, Server &server)
     }
     if (this->subcommand == "END")
     {
+        Client  *found = server.findClientByNick(client.getNickname());
+        if (found != &client)
+        {
+            message = "Nickname is already in use";
+            response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
+            server.sendResponse(client, response);
+            server.removeClient(&client);
+            return ; // throw std::invalid_argument("Nickname is in use");
+        }
         if (server.getPass() != client.getPassword())
         {
             response = buildNumericReply(server, client, ERR_PASSWDMISMATCH, "Wrong password mate!");
             server.sendResponse(client, response);
-            sleep(1); // TODO wait enough until client gets the response
             server.removeClient(&client);
             return ;
         }

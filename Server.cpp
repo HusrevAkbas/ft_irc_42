@@ -12,6 +12,8 @@ Server::~Server()
 	}
 	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
 		delete *it;
+	close (this->_epoll_fd);
+	close(this->_fd);
 }
 
 Server::Server(int fd, int epollFd, std::string name, std::string pass, sockaddr_in addr)
