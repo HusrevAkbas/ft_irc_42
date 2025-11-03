@@ -33,23 +33,23 @@ void NickCommand::response(Client &client, Server &server)
     {
         if (!client.getConnected())
         {
-            server.removeClient(server.findClientByFd(client.getSocketFd()));
-            throw std::invalid_argument("No nickname given");
+            server.removeClient(&client);
+            return ; // throw std::invalid_argument("No nickname given");
         }
         msg = "No nickname given";
         response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, msg);
+        server.sendResponse(client, response);
     }
     // if nickname is already in use send deny message, if not registered close connection
     else if (server.findClientByNick(this->getNickname()))
     {
         msg = "Nickname is already in use";
         response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
-        send(client.getSocketFd(), response.c_str(), response.length(), 0);
-        sleep(2); //TODO find another way to wait until client receive msg
+        server.sendResponse(client, response);
         if (!client.getConnected())
         {
-            server.removeClient(server.findClientByFd(client.getSocketFd()));
-            throw std::invalid_argument("Nickname is in use");
+            server.removeClient(&client);
+            return ; // throw std::invalid_argument("Nickname is in use");
         }
     }
     // set client nickname
@@ -57,7 +57,7 @@ void NickCommand::response(Client &client, Server &server)
     {
         if (!client.getNickname().empty())
         {
-            response.append(":").append(client.getNickname()). append(" NICK ").append(this->nickname).append("\r\n");
+            response =":" + client.getNickname() + " NICK " + this->nickname + "\r\n";
             server.sendResponse(client, response);
         }
         client.setNickname(this->nickname);
