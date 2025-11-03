@@ -19,6 +19,7 @@ class Client
 		int						_connected;
 		int						_channelLimit;
 		time_t					_timestamp;
+		bool					_invisibleMode;
 
 	public:
 		Client();
@@ -54,6 +55,7 @@ class Client
 		void		setConnected(int status);
 		void		setChannelLimit(int limit);
 		void		setTimestamp(time_t time);
+		void		setInvisibleMode(bool invisible);
 
 		std::string				getHostname() const;
 		std::string				getNetworkname() const;
@@ -67,6 +69,8 @@ class Client
 		int						getConnected() const;
 		int						getChannelLimit() const;
 		time_t					getTimestamp() const;
+		bool					getInvisibleMode() const;
+		std::string				getUserModes() const;
 
 		bool	isInChannel(Channel *channel) const;
 		void	addChannel(Channel *channel);

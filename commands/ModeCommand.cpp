@@ -90,6 +90,64 @@ void ModeCommand::response(Client &client, Server &server)
         return;
     }
 
+    if (targetName[0] != '#')
+    {
+        // User mode handling
+        if (targetName != client.getNickname())
+        {
+            response = buildNumericReply(server, client, ERR_USERSDONTMATCH, "Can't change mode for other users");
+            server.sendResponse(client, response);
+            return;
+        }
+
+        if (modes.empty())
+        {
+            response = buildNumericReplyNoColon(server, client, RPL_UMODEIS, client.getUserModes(), "");
+            server.sendResponse(client, response);
+            return;
+        }
+
+        bool adding = true;
+        std::string appliedModes = "";
+
+        for (size_t i = 0; i < modes.length(); i++)
+        {
+            char modeChar = modes[i];
+
+            if (modeChar == '+')
+            {
+                adding = true;
+                if (appliedModes.empty() || appliedModes[appliedModes.length() - 1] != '+')
+                    appliedModes += "+";
+            }
+            else if (modeChar == '-')
+            {
+                adding = false;
+                if (appliedModes.empty() || appliedModes[appliedModes.length() - 1] != '-')
+                    appliedModes += "-";
+            }
+            else if (modeChar == 'i')
+            {
+                client.setInvisibleMode(adding);
+                appliedModes += "i";
+            }
+            else
+            {
+                response = buildNumericReply(server, client, ERR_UMODEUNKNOWNFLAG, "Unknown MODE flag");
+                server.sendResponse(client, response);
+                return;
+            }
+        }
+
+        if (!appliedModes.empty())
+        {
+            response = buildNumericReplyNoColon(server, client, RPL_UMODEIS, appliedModes, "");
+            server.sendResponse(client, response);
+        }
+        return;
+    }
+
+    // Channel mode handling
     Channel *chan = server.findChannelByName(targetName);
 
     if (!chan)
