@@ -102,7 +102,8 @@ void    KickCommand::execute(Server& server, Client& client) {
 //      ERR_NOSUCHCHANNEL (403) 
 //      "<client> <channel> :No such channel"
         std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        server.sendResponse(client, err);
         return; 
     }
 
@@ -111,6 +112,8 @@ void    KickCommand::execute(Server& server, Client& client) {
 // 		ERR_NOTONCHANNEL (442) 
 //		"<client> <channel> :You're not on that channel"
 		std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
+        server.sendResponse(client, err);
+        return;
 	}
     
     //check whether sender is operator
@@ -118,7 +121,8 @@ void    KickCommand::execute(Server& server, Client& client) {
 //      ERR_CHANOPRIVSNEEDED (482) 
 //      "<client> <channel> :You're not channel operator"
         std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        server.sendResponse(client, err);
         return;
     }
 
@@ -128,18 +132,20 @@ void    KickCommand::execute(Server& server, Client& client) {
 //      ERR_USERNOTINCHANNEL (441) 
 //      "<client> <nick> <channel> :They aren't on that channel"
         std::string err = client.getUsername() + " " + _target + " " + _channel + " :They aren't on that channel\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        server.sendResponse(client, err);
         return;
     }
     
     //broadcast :sender KICK #channel target :reason
     checkReason();
     std::string response = client.getUsername() + " KICK " + _channel + _target + " :" + _reason + "\r\n";
-    send(client.getSocketFd(), response.c_str(), response.length(), 0);
-    
+    //send(client.getSocketFd(), response.c_str(), response.length(), 0);
+    //server.sendResponse(client, response);
     //remove target from channel
     channel->removeClient(*target);
     target->removeChannel(channel);
+    channel->broadcast(client, server, response);
 
 }
 

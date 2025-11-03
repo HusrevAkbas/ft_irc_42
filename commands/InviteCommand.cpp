@@ -72,6 +72,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
         //ERR_NOSUCHCHANNEL (403)
         std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
         // send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
         server.sendResponse(client, err);
         return;
     }
@@ -83,6 +84,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
             //ERR_CHANOPRIVSNEEDED (482)
             std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
             // send(client.getSocketFd(), err.c_str(), err.length(), 0);
+            //send(client.getSocketFd(), err.c_str(), err.length(), 0);
             server.sendResponse(client, err);
             return;
         }
@@ -94,6 +96,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
             //ERR_NOTONCHANNEL (442)
             std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
             // send(client.getSocketFd(), err.c_str(), err.length(), 0);
+            //send(client.getSocketFd(), err.c_str(), err.length(), 0);
             server.sendResponse(client, err);
             return;
         }
@@ -105,6 +108,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
         //ERR_USERONCHANNEL (443)
         std::string err = client.getUsername() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
         // send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
         server.sendResponse(client, err);
         return;
     }

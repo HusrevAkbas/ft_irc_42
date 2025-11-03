@@ -37,7 +37,8 @@ void    TopicCommand::execute(Server& server, Client& client) {
     if (!channel) {
         //ERR_NOSUCHCHANNEL (403)
         std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        server.sendResponse(client, err);
         return;
     }
 
@@ -45,7 +46,8 @@ void    TopicCommand::execute(Server& server, Client& client) {
     if (!channel->isClientInChannel(client)) {
         //ERR_NOTONCHANNEL (442)
         std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        server.sendResponse(client, err);
         return;
     }
 
@@ -56,12 +58,14 @@ void    TopicCommand::execute(Server& server, Client& client) {
         if (topic.empty()) {
             //RPL_NOTOPIC (331)
             std::string response = client.getUsername() + " " + _channel + " :No topic is set\r\n";
-            send(client.getSocketFd(), response.c_str(), response.length(), 0);
+            //send(client.getSocketFd(), response.c_str(), response.length(), 0);
+            server.sendResponse(client, response);
             return;
         } else {
             //RPL_TOPIC (332)
             std::string response = client.getUsername() + " " + _channel + " :<" + topic + ">\r\n";
-            send(client.getSocketFd(), response.c_str(), response.length(), 0);
+            //send(client.getSocketFd(), response.c_str(), response.length(), 0);
+            server.sendResponse(client, response);
             //TO-DO add whotime 
             return;
         }
@@ -74,7 +78,8 @@ void    TopicCommand::execute(Server& server, Client& client) {
         //check client is operator
         if (!channel->isOperator(client)) {
             std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
-            send(client.getSocketFd(), err.c_str(), err.length(), 0);
+            //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+            server.sendResponse(client, err);
             return;
         }
     }
@@ -88,6 +93,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     channel->setTopic(_topic);
     std::string response = Command::buildNumericReplyNoColon(server, client, RPL_TOPIC, channel->getName(), channel->getTopic());
     server.sendResponse(client, response);
+    channel->broadcast(client, server, response);
 }
 
 void TopicCommand::response(Client &client, Server &server)
