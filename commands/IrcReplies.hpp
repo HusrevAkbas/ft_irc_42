@@ -14,12 +14,14 @@ enum IrcReply {
     RPL_LUSERCHANNELS   = 254,
     RPL_LUSERME         = 255,
 
+    RPL_ENDOFWHO        = 315,
     RPL_LISTSTART       = 321,
     RPL_LIST            = 322,
     RPL_LISTEND         = 323,
     RPL_CHANNELMODEIS   = 324,
     RPL_NOTOPIC         = 331,
     RPL_TOPIC           = 332,
+    RPL_WHOREPLY        = 352,
     RPL_NAMREPLY        = 353,
     RPL_ENDOFNAMES      = 366,
 
@@ -38,7 +40,9 @@ enum IrcReply {
     ERR_UNKNOWNMODE         = 472,
     ERR_INVITEONLYCHAN      = 473,
     ERR_BADCHANNELKEY       = 475,
-    ERR_CHANOPRIVSNEEDED    = 482
+    ERR_CHANOPRIVSNEEDED    = 482,
+    ERR_UMODEUNKNOWNFLAG    = 501,
+    ERR_USERSDONTMATCH      = 502
 };
 
 std::string toString(IrcReply code);
