@@ -218,8 +218,16 @@ void	Server::handleRequest(std::string input, int fd)
 
 		try
 		{
-			Command *command = parseCommand(request);
+			Command	*command = parseCommand(request);
+			Client	*client = findClientByFd(fd);
+			if (client == NULL)
+      {
+        std::cout << "Client was removed by one of previous commands, stopping request handling\n";
+        return;
+      }
 
+			std::string	response;
+			
 			// let command class handle request and then send response
 			command->response(*client, *this);
 			delete command;
