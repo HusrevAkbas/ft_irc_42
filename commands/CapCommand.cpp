@@ -46,7 +46,6 @@ void    CapCommand::response(Client &client, Server &server)
         {
             response = buildNumericReply(server, client, ERR_PASSWDMISMATCH, "Wrong password mate!");
             server.sendResponse(client, response);
-            sleep(1); // TODO wait enough until client gets the response
             server.removeClient(&client);
             return ;
         }
