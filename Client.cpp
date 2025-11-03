@@ -1,12 +1,12 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-Client::Client() : _socketFd(-1), _connected(0)
+Client::Client() : _socketFd(-1), _connected(0), _invisibleMode(false)
 {
 	this->_timestamp = std::time(0);
 }
 
-Client::Client(int fd) : _socketFd(fd), _connected(0)
+Client::Client(int fd) : _socketFd(fd), _connected(0), _invisibleMode(false)
 {
 	this->_timestamp = std::time(0);
 }
@@ -37,6 +37,7 @@ Client&	Client::operator=(const Client &other)
 	this->_connected = other._connected;
 	this->_channelLimit = other._channelLimit;
 	this->_timestamp = other._timestamp;
+	this->_invisibleMode = other._invisibleMode;
 	return (*this);
 }
 
@@ -139,6 +140,21 @@ void	Client::setChannelLimit(int limit) {
 
 void	Client::setTimestamp(time_t time) {
 	_timestamp = time;
+}
+
+void	Client::setInvisibleMode(bool invisible) {
+	_invisibleMode = invisible;
+}
+
+bool	Client::getInvisibleMode() const {
+	return _invisibleMode;
+}
+
+std::string	Client::getUserModes() const {
+	std::string modes = "+";
+	if (_invisibleMode)
+		modes += "i";
+	return modes;
 }
 
 

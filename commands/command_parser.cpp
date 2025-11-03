@@ -224,10 +224,8 @@ Command *parseCommand(const std::string &input)
         {
             throw MissingParametersException("USER", "Not enough parameters");
         }
-        // if (params[1] != "0" || params[2] != "*") {
-        //     throw std::invalid_argument("USER command parameters 2 and 3 should be '0' and '*'");
-        // }
-        return new UserCommand(params[0], params[3]);
+
+        return new UserCommand(params[0], params[1], params[2], params[3]);
     }
     else if (cmdType == "WHO")
     {
