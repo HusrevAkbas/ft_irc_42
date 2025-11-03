@@ -1,12 +1,12 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-Client::Client() : _socketFd(-1), _connected(0)
+Client::Client() : _socketFd(-1), _connected(0), _invisibleMode(false)
 {
 	this->_timestamp = std::time(0);
 }
 
-Client::Client(int fd) : _socketFd(fd), _connected(0)
+Client::Client(int fd) : _socketFd(fd), _connected(0), _invisibleMode(false)
 {
 	this->_timestamp = std::time(0);
 }
@@ -37,6 +37,7 @@ Client&	Client::operator=(const Client &other)
 	this->_connected = other._connected;
 	this->_channelLimit = other._channelLimit;
 	this->_timestamp = other._timestamp;
+	this->_invisibleMode = other._invisibleMode;
 	return (*this);
 }
 
@@ -46,18 +47,29 @@ const int	Client::totalClientLimit = 1000;
 
 //GETTERS
 
+std::string	Client::getHostname() const
+{	return (this->_hostname);	}
+
+std::string	Client::getNetworkname() const
+{	return (this->_networkname);	}
+
+std::string	Client::getRealname() const
+{	return (this->_realname);	}
+
+std::string	Client::getPassword() const
+{	return (this->_password);	}
+
 std::string	Client::getNickname() const
 {	return (this->_nickname);	}
 
-// std::string	Client::getUsername() const
-// {	return (this->_username);	}
+std::string	Client::getUsername() const
+{	return (this->_username);	}
 
 epoll_event	Client::getEvent() const
 {	return (this->_event);	}
 
-// std::vector<Channel *>	Client::getChannels() const {
-// 	return _channels;
-// }
+std::vector<Channel *>	Client::getChannels() const
+{	return (this->_channels);	}
 
 int	Client::getSocketFd() const
 {	return (this->_socketFd);	}
@@ -73,14 +85,47 @@ time_t	Client::getTimestamp() const {
 	return _timestamp;
 }
 
+bool	Client::getInvisibleMode() const {
+	return _invisibleMode;
+}
+
+std::string	Client::getUserModes() const {
+	std::string modes = "+";
+	if (_invisibleMode)
+		modes += "i";
+	return modes;
+}
+
 
 //SETTERS
+
+void	Client::setHostname(std::string hostname)
+{
+	this->_hostname = hostname;
+}
+
+void	Client::setNetworkname(std::string networkname)
+{
+	this->_networkname = networkname;
+}
+
+void	Client::setRealname(std::string realname)
+{
+	this->_realname = realname;
+}
+
+void	Client::setPassword(std::string password)
+{
+	this->_password = password;
+}
 
 void	Client::setNickname(const std::string nick)
 {	this->_nickname = nick;	}
 
-// void	Client::setUsername(const std::string username)
-// {	this->_username = username;	}
+void	Client::setUsername(std::string username)
+{
+	this->_username = username;
+}
 
 void	Client::setEvent(struct epoll_event event)
 {	this->_event = event;	}
@@ -95,50 +140,16 @@ void	Client::setSocketFd(int fd)
 void	Client::setConnected(int status)
 {	this->_connected = status;	}
 
-std::vector<Channel *>	Client::getChannels() const
-{	return (this->_channels);	}
-
-std::string	Client::getUsername() const
-{	return (this->_username);	}
-
-std::string	Client::getHostname() const
-{	return (this->_hostname);	}
-
-std::string	Client::getNetworkname() const
-{	return (this->_networkname);	}
-
-std::string	Client::getRealname() const
-{	return (this->_realname);	}
-
-std::string	Client::getPassword() const
-{	return (this->_password);	}
-
-void	Client::setUsername(std::string username)
-{
-	this->_username = username;
-}
-void	Client::setHostname(std::string hostname)
-{
-	this->_hostname = hostname;
-}
-void	Client::setNetworkname(std::string networkname)
-{
-	this->_networkname = networkname;
-}
-void	Client::setRealname(std::string realname)
-{
-	this->_realname = realname;
-}
-void	Client::setPassword(std::string password)
-{
-	this->_password = password;
-}
 void	Client::setChannelLimit(int limit) {
 	_channelLimit = limit;
 }
 
 void	Client::setTimestamp(time_t time) {
 	_timestamp = time;
+}
+
+void	Client::setInvisibleMode(bool invisible) {
+	_invisibleMode = invisible;
 }
 
 

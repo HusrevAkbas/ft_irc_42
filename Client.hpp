@@ -19,6 +19,7 @@ class Client
 		int						_connected;
 		int						_channelLimit;
 		time_t					_timestamp;
+		bool					_invisibleMode;
 
 	public:
 		Client();
@@ -31,17 +32,6 @@ class Client
 		static int			totalClientCount;
 		static const int	totalClientLimit;
 
-		// std::string	getNickname() const;
-		// void	setNickname(std::string nick);
-		// int		getSocketFd() const;
-		// void	setSocketFd(int fd);
-		// epoll_event	getEvent();
-		// void	setEvent(struct epoll_event event);
-		// int		getConnected();
-		// void	setConnected(int status);
-		// std::vector<Channel *>	getChannels() const;
-		// std::string	getUsername() const;
-		// void setUsername(std::string getUsername);
 		void 		setHostname(std::string getHostname);
 		void 		setNetworkname(std::string getNetworkname);
 		void 		setRealname(std::string getRealname);
@@ -54,6 +44,7 @@ class Client
 		void		setConnected(int status);
 		void		setChannelLimit(int limit);
 		void		setTimestamp(time_t time);
+		void		setInvisibleMode(bool invisible);
 
 		std::string				getHostname() const;
 		std::string				getNetworkname() const;
@@ -67,6 +58,8 @@ class Client
 		int						getConnected() const;
 		int						getChannelLimit() const;
 		time_t					getTimestamp() const;
+		bool					getInvisibleMode() const;
+		std::string				getUserModes() const;
 
 		bool	isInChannel(Channel *channel) const;
 		void	addChannel(Channel *channel);

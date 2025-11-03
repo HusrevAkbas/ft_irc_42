@@ -140,6 +140,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     //remove target from channel
     channel->removeClient(*target);
     target->removeChannel(channel);
+    channel->broadcast(client, server, response);
 
 }
 

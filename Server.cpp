@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "commands/CommandExceptions.hpp"
 
 Server::Server() : _fd(-1), _epoll_fd(-1) {}
 
@@ -86,8 +87,6 @@ std::vector<Channel *>	Server::getChannels()
 
 std::vector<Client *>::iterator	Server::findClientPos(const Client * client)
 {
-	return this->_clients.begin();
-
 	for (size_t i = 0; i < this->_clients.size(); i++)
 	{
 		if (this->_clients[i] == client)
@@ -209,19 +208,51 @@ void	Server::handleRequest(std::string input, int fd)
 		request += "\n";
 		// TODO: output for development, testing and debugging, REMOVE after project is ready
 		std::cout << GREEN << "---REQUEST---: " << RESET << request;
+
+		Client *client = findClientByFd(fd);
+		if (client == NULL)
+		{
+			std::cout << "Client not found, stopping request handling\n";
+			return;
+		}
+
 		try
 		{
 			Command	*command = parseCommand(request);
 			Client	*client = findClientByFd(fd);
+			if (client == NULL)
+      {
+        std::cout << "Client was removed by one of previous commands, stopping request handling\n";
+        return;
+      }
+
 			std::string	response;
 			
 			// let command class handle request and then send response
 			command->response(*client, *this);
+			delete command;
+		}
+		catch (const UnknownCommandException &e)
+		{
+			std::string response = ":" + this->_name + " 421 " + client->getNickname() + " ";
+			response += e.getCommandName() + " :Unknown command\r\n";
+			sendResponse(*client, response);
+
+			std::cerr << "Unknown command: " << e.getCommandName() << "\n";
+		}
+		catch (const MissingParametersException &e)
+		{
+			std::string response = ":" + this->_name + " 461 " + client->getNickname() + " ";
+			response += e.getCommandName() + " :Not enough parameters\r\n";
+			sendResponse(*client, response);
+
+			std::cerr << "Missing parameters for command: " << e.getCommandName() << "\n";
 		}
 		catch (std::exception &e)
 		{
 			// TODO: output for development, testing and debugging, REMOVE after project is ready
-			std::cerr << "Exception catched in Server::handleRequest:\n" << e.what() << "\n";
+			std::cerr << "Unexpected exception in Server::handleRequest:\n"
+						<< e.what() << "\n";
 		}
 	}
 }
