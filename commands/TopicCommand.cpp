@@ -88,6 +88,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     channel->setTopic(_topic);
     std::string response = Command::buildNumericReplyNoColon(server, client, RPL_TOPIC, channel->getName(), channel->getTopic());
     server.sendResponse(client, response);
+    channel->broadcast(client, server, response);
 }
 
 void TopicCommand::response(Client &client, Server &server)

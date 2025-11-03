@@ -32,17 +32,6 @@ class Client
 		static int			totalClientCount;
 		static const int	totalClientLimit;
 
-		// std::string	getNickname() const;
-		// void	setNickname(std::string nick);
-		// int		getSocketFd() const;
-		// void	setSocketFd(int fd);
-		// epoll_event	getEvent();
-		// void	setEvent(struct epoll_event event);
-		// int		getConnected();
-		// void	setConnected(int status);
-		// std::vector<Channel *>	getChannels() const;
-		// std::string	getUsername() const;
-		// void setUsername(std::string getUsername);
 		void 		setHostname(std::string getHostname);
 		void 		setNetworkname(std::string getNetworkname);
 		void 		setRealname(std::string getRealname);
