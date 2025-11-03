@@ -40,18 +40,6 @@ void NickCommand::response(Client &client, Server &server)
         response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, msg);
         server.sendResponse(client, response);
     }
-    // if nickname is already in use send deny message, if not registered close connection
-    else if (server.findClientByNick(this->getNickname()))
-    {
-        msg = "Nickname is already in use";
-        response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
-        server.sendResponse(client, response);
-        if (!client.getConnected())
-        {
-            server.removeClient(&client);
-            return ; // throw std::invalid_argument("Nickname is in use");
-        }
-    }
     // set client nickname
     else
     {
