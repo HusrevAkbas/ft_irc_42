@@ -54,6 +54,8 @@ Command *parseCommand(const std::string &input)
             {
                 trailing += remainder;
             }
+            if (trailing[trailing.length() - 1] == '\r')
+                trailing.erase(trailing.end() - 1);
             params.push_back(trailing);
             break;
         }
