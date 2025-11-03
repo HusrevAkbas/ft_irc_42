@@ -171,7 +171,7 @@ void ModeCommand::response(Client &client, Server &server)
         return;
     }
 
-    if (!chan->isOperator(client))
+    if ((modes[0] == '+' || modes[0] == '-') && !chan->isOperator(client))
     {
         response = buildNumericReply(server, client, ERR_CHANOPRIVSNEEDED, targetName, "You're not channel operator");
         server.sendResponse(client, response);
@@ -270,6 +270,23 @@ void ModeCommand::response(Client &client, Server &server)
                 chan->setUserLimit(0);
                 appliedModes += "l";
             }
+        }
+        else if (modeChar == 'b')
+        {
+            // irssi sends 'MODE <channel> b', return empty list
+            // response += buildNumericReply(server, client, RPL_ENDOFBANS, "", "End of Channel Ban list");
+
+            response += server.getName();
+            response += " ";
+            response += toString(RPL_ENDOFBANS);
+            response += " ";
+            response += client.getNickname();
+            response += " :";
+            response += "End of Channel Ban list";
+            response += "\r\n";
+
+            server.sendResponse(client, response);
+            return;
         }
         else
         {
