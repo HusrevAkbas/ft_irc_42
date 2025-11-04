@@ -9,8 +9,9 @@ class Channel
 {
 	private:
 		std::string	_name;
-		std::vector<Client *>	_operators;
-		std::vector<Client *>	_clients;
+		std::vector<Client *>		_operators;
+		std::vector<Client *>		_clients;
+		std::vector<std::string>	_inviteList;
 		std::string	_password;
 		std::string	_topic;
 		bool		_i_inviteOnly;
@@ -18,7 +19,6 @@ class Channel
 		bool		_k_usePassword;
 		int			_l_userLimit;
 		time_t		_timestamp;
-		int			_inviteList;
 	public:
 		Channel();
 		Channel(const std::string &name);
@@ -38,9 +38,9 @@ class Channel
 		bool	getTopicStatus() const;
 		bool	getPassStatus() const;
 		int		getUserLimit() const;
-		std::vector<Client *>	getOperators() const;
-		std::vector<Client *>	getClients() const;
-		int		getInviteList() const;
+		std::vector<Client *>		getOperators() const;
+		std::vector<Client *>		getClients() const;
+		std::vector<std::string>	getInviteList() const;
 
 		void	setName(const std::string &name);
 		void	setPassword(const std::string &pass);
@@ -52,11 +52,12 @@ class Channel
 
 		void	addClient(Client &client);
 		void	addOperator(Client &client);
-		void	addInviteList(int newInvite);
+		void	addInviteList(const std::string& newInvite);
 		void	removeClient(Client &client);
 		void	removeOperator(Client &client);
 		bool	isClientInChannel(Client &client) const;
 		bool	isOperator(Client &client) const;
+		bool	isNickInInviteList(const std::string& nickname);
 
 		void	broadcast(Client &client, Server &server, std::string &response);
 };
