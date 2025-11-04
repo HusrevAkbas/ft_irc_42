@@ -150,6 +150,5 @@ std::string JoinCommand::joinSingleChannel(Server &server, Client &client,
     response += buildNameReply(server, client, channelName, namesList);
     response += buildNumericReply(server, client, RPL_ENDOFNAMES, channelName, "End of /NAMES list");
 
-    chan->broadcast(client, server, response);
     return response;
 }

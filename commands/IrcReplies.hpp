@@ -14,7 +14,10 @@ enum IrcReply {
     RPL_LUSERCHANNELS   = 254,
     RPL_LUSERME         = 255,
 
+    RPL_WHOISUSER       = 311,
+    RPL_WHOISSERVER     = 312,
     RPL_ENDOFWHO        = 315,
+    RPL_ENDOFWHOIS      = 318,
     RPL_LISTSTART       = 321,
     RPL_LIST            = 322,
     RPL_LISTEND         = 323,

@@ -38,6 +38,39 @@ std::string WhoisCommand::getNickname() const
 
 void WhoisCommand::response(Client &client, Server &server)
 {
-	(void)client;
-	(void)server;
+	std::string response;
+	
+	if (this->nickname.empty())
+	{
+		// no nickname given
+		response = buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, "No nickname given");
+		server.sendResponse(client, response);
+		return ;
+	}
+
+	Client	*target = server.findClientByNick(this->nickname);
+
+	if (!target)
+	{
+		// no suchnick
+		response = ":" + server.getName() + " " + toString(ERR_NOSUCHNICK) + " " + client.getNickname()
+		+ " " + this->nickname + " :No such nickname\r\n";
+		server.sendResponse(client, response);
+	}
+	else
+	{
+		response = ":" + server.getName() + " " + toString(RPL_WHOISUSER) + " "
+		+ client.getNickname() + " " + target->getNickname() + " " + target->getUsername()
+		+ " " + target->getHostname() + " * :" + target->getRealname() + "\r\n";
+		server.sendResponse(client, response);
+
+		// response = ":" + server.getName() + " " + toString(RPL_WHOISSERVER) + " "
+		// + client.getNickname() + " " + this->nickname + " " + server.getName();
+		response = buildNumericReplyNoColon(server, client, RPL_WHOISSERVER, this->nickname, server.getName());
+		server.sendResponse(client, response);
+
+		response = ":" + server.getName() + " " + toString(RPL_ENDOFWHOIS) + " " + client.getNickname()
+		+ " " + this->nickname + " :End of /WHOIS\r\n";
+		server.sendResponse(client, response);
+	}
 }
