@@ -106,8 +106,10 @@ ISSUES:
 
 	6- if there are many clients connected, PING command or PONG message causes segfault (SOLVED)
 
-	7- Any idea when this is happen ???
+	(SOLVED)	7- Any idea when this is happen ???
 	Irssi: critical nicklist_set_host: assertion 'host != NULL' failed
+	Solution: hostname and networkname are added to response in Command::buildClientMessage
+	(SOLVED)
 
 	8- we see one more ':' in topic when someone joined a channel oksana(JOIN)
 
