@@ -45,8 +45,7 @@ void    CapCommand::response(Client &client, Server &server)
         Client  *found = server.findClientByNick(client.getNickname());
         if (found != &client)
         {
-            message = "Nickname is already in use";
-            response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
+            response = "ERROR :Nickname is already in use\r\n";
             server.sendResponse(client, response);
             server.removeClient(&client);
             return ; // throw std::invalid_argument("Nickname is in use");

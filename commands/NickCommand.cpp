@@ -26,7 +26,6 @@ std::string NickCommand::getNickname() const {
 void NickCommand::response(Client &client, Server &server)
 {
     std::string response;
-    std::string msg;
 
     // check if nickname exist
     if (this->nickname.empty())
@@ -36,18 +35,29 @@ void NickCommand::response(Client &client, Server &server)
             server.removeClient(&client);
             return ; // throw std::invalid_argument("No nickname given");
         }
-        msg = "No nickname given";
-        response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, msg);
+        response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, "No nickname given");
         server.sendResponse(client, response);
     }
     // set client nickname
     else
     {
-        if (!client.getNickname().empty())
+        if (!client.getConnected())
+            client.setNickname(this->nickname);
+        else if (server.findClientByNick(this->nickname))
+        {
+            response = ":" + server.getName() + " " + toString(ERR_NICKNAMEINUSE) + " "
+            + client.getNickname() + " " + this->nickname + "\r\n";
+            server.sendResponse(client, response);
+        }
+        else
         {
             response =":" + client.getNickname() + " NICK " + this->nickname + "\r\n";
             server.sendResponse(client, response);
+            for (size_t i = 0; i < client.getChannels().size(); i++)
+            {
+                server.broadcast(client, response);
+            }
+            client.setNickname(this->nickname);
         }
-        client.setNickname(this->nickname);
     }
 }
