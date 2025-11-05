@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include <string>
 #include <sstream>
+#include "Signals.hpp"
 
 #define	BUFFER_SIZE	1000
 #define	MAX_READY_EVENTS	100
@@ -47,6 +48,7 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 
 int	main(int argc, char **argv)
 {
+	setup_signals();
 	std::string	password;
 	int			port;
 
@@ -121,14 +123,18 @@ int	main(int argc, char **argv)
 	char		buff[BUFFER_SIZE + 1];
 	std::string	input;
 
-	while (1)
+	while (!signal_shutdown)
 	{
-		//	wait events for registered file descriptors
+		// wait events for registered file descriptors
 		int	event_n = epoll_wait(epoll_fd, pending, MAX_READY_EVENTS, -1);
 		if (event_n == -1)
 		{
-			std::cerr << "Error: epoll_wait\n";
-			return (1);
+			if (errno == EINTR) { // EINTR  Interrupted function call
+				if (signal_shutdown) break;
+			}
+			continue;
+			// std::cerr << "Error: epoll_wait\n";
+			// return (1);
 		}
 
 		// loop through events which have input

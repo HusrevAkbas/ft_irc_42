@@ -85,7 +85,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
             return;
         }
         //add invite to invite list
-        channel->addInviteList(1);
+        channel->addInviteList(_nickname);
     } else {
         //check whether client is in channel
         if (!channel->isClientInChannel(client)) {
@@ -110,7 +110,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
     //send invite to user
     std::string response = client.getUsername() + " invites you to #" + _channel + "\r\n";
     //send(clientB->getSocketFd(), response.c_str(), response.length(), 0);
-    server.sendResponse(clientB, response);
+    server.sendResponse(*clientB, response);
 }
 
 void InviteCommand::response(Client &client, Server &server)
