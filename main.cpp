@@ -69,6 +69,7 @@ int	main(int argc, char **argv)
 	if (setsockopt(server_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 	{
 		std::cerr << "Error: setsockopt " << opt << "\n";
+		close (server_socket_fd);
 		return (1);
 	}
 
@@ -99,6 +100,7 @@ int	main(int argc, char **argv)
 	if (epoll_fd == -1)
 	{
 		std::cerr << "Error: epoll_create1\n";
+		close (server_socket_fd);
 		return (1);
 	}
 
@@ -111,17 +113,17 @@ int	main(int argc, char **argv)
 	if (status == -1)
 	{
 		std::cerr << "Error: epoll_ctl, add, server fd\n";
+		close (server_socket_fd);
+		close (epoll_fd);
 		return (1);
 	}
 
 	Server	server(server_socket_fd, epoll_fd, SERVER_NAME, password, server_address);
-	// std::cout << "Server start on port " << ntohs(server.getAddr().sin_port)
-	// << "\nPassword(evaluation only): " << server.getPass() << "\n";
 	std::cout << server;
 
 	struct epoll_event	pending[MAX_READY_EVENTS];
-	char		buff[BUFFER_SIZE + 1];
-	std::string	input;
+	char				buff[BUFFER_SIZE + 1];
+	std::string			input;
 
 	while (!signal_shutdown)
 	{
