@@ -2,7 +2,7 @@ CFLAGS		=	-Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 COMPILER	=	c++
 
-SRCS		=	main.cpp Client.cpp helper.cpp Server.cpp Channel.cpp $(addprefix $(COMMANDSDIR), $(COMMANDSSRC))
+SRCS		=	main.cpp Client.cpp helper.cpp Server.cpp Channel.cpp Signals.cpp $(addprefix $(COMMANDSDIR), $(COMMANDSSRC))
 COMMANDSDIR	=	commands/
 COMMANDSSRC	=	CapCommand.cpp Command.cpp CommandExceptions.cpp command_parser.cpp InviteCommand.cpp JoinCommand.cpp KickCommand.cpp ModeCommand.cpp NickCommand.cpp PartCommand.cpp PassCommand.cpp PingCommand.cpp PrivmsgCommand.cpp QuitCommand.cpp TopicCommand.cpp UserCommand.cpp WhoCommand.cpp WhoisCommand.cpp LusersCommand.cpp ListCommand.cpp IrcReplies.cpp
 
@@ -35,10 +35,10 @@ fclean : clean
 re : fclean all
 
 #	port 6667 is standard for plain text, port 6697 is standard for TLS connections
-run : all clean
+run : all
 	@./$(NAME) 6667 SAFEME
 
-val : all clean
+val : all
 	@valgrind --track-fds=all -s --leak-check=full --show-leak-kinds=possible ./$(NAME) 6667 SAFEME
 
 .phony : all c clean f fclean re run

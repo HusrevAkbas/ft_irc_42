@@ -89,7 +89,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
             return;
         }
         //add invite to invite list
-        // channel->addInviteList(1);
+        channel->addInviteList(_nickname);
     } else {
         //check whether client is in channel
         if (!channel->isClientInChannel(client)) {
