@@ -115,4 +115,4 @@ ISSUES:
 
 	9- Invite/invitelist will be reworked - Ildoko(INVITE)/oksana(JOIN)
 
-	10- Set hostname and server in response hüsrev nick!host@server
+	10- Set hostname and server in response hüsrev nick!host@server (SOLVED)

@@ -38,4 +38,7 @@ re : fclean all
 run : all clean
 	@./$(NAME) 6667 SAFEME
 
+val : all clean
+	@valgrind --track-fds=all -s --leak-check=full --show-leak-kinds=possible ./$(NAME) 6667 SAFEME
+
 .phony : all c clean f fclean re run
