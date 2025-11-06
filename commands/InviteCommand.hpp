@@ -18,7 +18,7 @@ public:
     std::string getNickname() const;
     std::string getChannel() const;
 
-    bool        checkParams(Client& client);
+    bool        checkParams(Server& server, Client& client);
     Client*     findUser(const std::string& nickname, Channel* channel);
     void        execute(Server& server, Client& client);
     void        response(Client &client, Server &server);

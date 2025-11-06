@@ -33,15 +33,15 @@ std::string InviteCommand::getChannel() const {
 
 //METHODS
 
-bool    InviteCommand::checkParams(Client& client) {
+bool    InviteCommand::checkParams(Server& server, Client& client) {
     if (_nickname.empty()) {
-        std::string err = client.getUsername() + " KICK :Not enough parameters\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        std::string err = client.getNickname() + " KICK :Not enough parameters\r\n";
+        server.sendResponse(client, err);
         return false;
     }
     if (_channel.empty()) {
-        std::string err = client.getUsername() + " KICK :Not enough parameters\r\n";
-        send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        std::string err = client.getNickname() + " KICK :Not enough parameters\r\n";
+        server.sendResponse(client, err);
         return false;
     }
     return true;
@@ -60,7 +60,7 @@ Client* InviteCommand::findUser(const std::string& nickname, Channel* channel) {
 
 void    InviteCommand::execute(Server& server, Client& client) {
     //check command parameters
-    if (!checkParams(client)) {
+    if (!checkParams(server, client)) {
         return;
     }
 
@@ -68,8 +68,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
     Channel* channel = server.findChannelByName(_channel);
     if (!channel) {
         //ERR_NOSUCHCHANNEL (403)
-        std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
-        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        std::string err = ": " + server.getName() + " 403 " + client.getNickname() + " " + _channel + " :No such channel\r\n";
         server.sendResponse(client, err);
         return;
     }
@@ -79,8 +78,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
         //check whether user is operator
         if (!channel->isOperator(client)) {
             //ERR_CHANOPRIVSNEEDED (482)
-            std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
-            //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+            std::string err = ": " + server.getName() + " 482 " + client.getNickname() + " " + _channel + " :You're not channel operator\r\n";
             server.sendResponse(client, err);
             return;
         }
@@ -90,8 +88,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
         //check whether client is in channel
         if (!channel->isClientInChannel(client)) {
             //ERR_NOTONCHANNEL (442)
-            std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
-            //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+            std::string err = ": " + server.getName() + " 442 " + client.getNickname() + " " + _channel + " :You're not on that channel\r\n";
             server.sendResponse(client, err);
             return;
         }
@@ -101,22 +98,17 @@ void    InviteCommand::execute(Server& server, Client& client) {
     Client* clientB = findUser(_nickname, channel);
     if (!clientB) {
         //ERR_USERONCHANNEL (443)
-        std::string err = client.getUsername() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
-        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+        std::string err = ": " + server.getName() + " 443 " + client.getNickname() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
         server.sendResponse(client, err);
         return;
     }
 
     //send invite to user
-    std::string response = client.getUsername() + " invites you to #" + _channel + "\r\n";
-    //send(clientB->getSocketFd(), response.c_str(), response.length(), 0);
+    std::string response = ": " + server.getName() + " 341 " + client.getNickname() + " invites you to " + _channel + "\r\n";
     server.sendResponse(*clientB, response);
 }
 
 void InviteCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    // (void)server;
-    // (void)client;
     execute(server, client);
 }

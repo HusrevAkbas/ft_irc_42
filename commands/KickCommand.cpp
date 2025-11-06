@@ -99,29 +99,24 @@ void    KickCommand::execute(Server& server, Client& client) {
     //check whether channel exists
     Channel* channel = server.findChannelByName(_channel);
     if (!channel) {
-//      ERR_NOSUCHCHANNEL (403) 
-//      "<client> <channel> :No such channel"
-        std::string err = client.getUsername() + " " + _channel + " :No such channel\r\n";
-        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+//      ERR_NOSUCHCHANNEL (403)
+        std::string err = ": " + server.getName() + " 403 " + client.getNickname() + " " + _channel + " :No such channel\r\n";
         server.sendResponse(client, err);
         return; 
     }
 
 	//check whether sender is in channel
 	if (!channel->isClientInChannel(client)) {
-// 		ERR_NOTONCHANNEL (442) 
-//		"<client> <channel> :You're not on that channel"
-		std::string err = client.getUsername() + " " + _channel + " :You're not on that channel\r\n";
+// 		ERR_NOTONCHANNEL (442)
+		std::string err = ": " + server.getName() + " 442 " + client.getNickname() + " " + _channel + " :You're not on that channel\r\n";
         server.sendResponse(client, err);
         return;
 	}
     
     //check whether sender is operator
     if (!channel->isOperator(client)) {
-//      ERR_CHANOPRIVSNEEDED (482) 
-//      "<client> <channel> :You're not channel operator"
-        std::string err = client.getUsername() + " " + _channel + " :You're not channel operator\r\n";
-        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+//      ERR_CHANOPRIVSNEEDED (482)
+        std::string err = ": " + server.getName() + " 482 " + client.getNickname() + " " + _channel + " :You're not channel operator\r\n";
         server.sendResponse(client, err);
         return;
     }
@@ -129,19 +124,17 @@ void    KickCommand::execute(Server& server, Client& client) {
     //check whether target is in channel
     Client* target = findClient(_target, channel);
     if (!target) {
-//      ERR_USERNOTINCHANNEL (441) 
-//      "<client> <nick> <channel> :They aren't on that channel"
-        std::string err = client.getUsername() + " " + _target + " " + _channel + " :They aren't on that channel\r\n";
-        //send(client.getSocketFd(), err.c_str(), err.length(), 0);
+//      ERR_USERNOTINCHANNEL (441)
+        std::string err = ": " + server.getName() + " 441 " + client.getNickname() + " " + _target + " " + _channel + " :They aren't on that channel\r\n";
         server.sendResponse(client, err);
         return;
     }
     
     //broadcast :sender KICK #channel target :reason
     checkReason();
-    std::string response = client.getUsername() + " KICK " + _channel + _target + " :" + _reason + "\r\n";
-    //send(client.getSocketFd(), response.c_str(), response.length(), 0);
+    std::string response = client.getNickname() + " KICK " + _channel + _target + " :" + _reason + "\r\n";
     //server.sendResponse(client, response);
+    
     //remove target from channel
     channel->removeClient(*target);
     target->removeChannel(channel);
@@ -151,8 +144,5 @@ void    KickCommand::execute(Server& server, Client& client) {
 
 void KickCommand::response(Client &client, Server &server)
 {
-    // TODO: implement
-    // (void)server;
-    // (void)client;
     execute(server, client);
 }

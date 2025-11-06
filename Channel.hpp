@@ -9,9 +9,10 @@ class Channel
 {
 	private:
 		std::string	_name;
-		std::vector<Client *>		_operators;
-		std::vector<Client *>		_clients;
-		std::vector<std::string>	_inviteList;
+		std::vector<Client *>			_operators;
+		std::vector<Client *>			_clients;
+		std::vector<std::string>		_inviteList;
+		std::pair<std::string, time_t>	_topicSetterTimestamp;
 		std::string	_password;
 		std::string	_topic;
 		bool		_i_inviteOnly;
@@ -38,9 +39,10 @@ class Channel
 		bool	getTopicStatus() const;
 		bool	getPassStatus() const;
 		int		getUserLimit() const;
-		std::vector<Client *>		getOperators() const;
-		std::vector<Client *>		getClients() const;
-		std::vector<std::string>	getInviteList() const;
+		std::vector<Client *>			getOperators() const;
+		std::vector<Client *>			getClients() const;
+		std::vector<std::string>		getInviteList() const;
+		std::pair<std::string, time_t>	getTopicSetterTimestamp() const;
 
 		void	setName(const std::string &name);
 		void	setPassword(const std::string &pass);
@@ -49,6 +51,7 @@ class Channel
 		void	setTopicSetable(bool status);
 		void	setUsePassword(bool status);
 		void	setUserLimit(int limit);
+		void	setTopicSetterTimestamp(const std::string& setter, time_t timestamp);
 
 		void	addClient(Client &client);
 		void	addOperator(Client &client);

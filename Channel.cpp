@@ -33,6 +33,7 @@ Channel&	Channel::operator=(const Channel &other)
 	this->_t_topicSetable = other._t_topicSetable;
 	this->_k_usePassword = other._k_usePassword;
 	this->_l_userLimit = other._l_userLimit;
+	_topicSetterTimestamp = other._topicSetterTimestamp;
 	return (*this);
 }
 
@@ -88,6 +89,10 @@ std::vector<std::string>	Channel::getInviteList() const {
 	return _inviteList;
 }
 
+std::pair<std::string, time_t>	Channel::getTopicSetterTimestamp() const {
+	return _topicSetterTimestamp;
+}
+
 void	Channel::setName(const std::string &name)
 {
 	this->_name = name;
@@ -121,6 +126,11 @@ void	Channel::setUsePassword(bool status)
 void	Channel::setUserLimit(int limit)
 {
 	this->_l_userLimit = limit;
+}
+
+void	Channel::setTopicSetterTimestamp(const std::string& setter, time_t timestamp) {
+	_topicSetterTimestamp.first = setter;
+	_topicSetterTimestamp.second = timestamp;
 }
 
 void	Channel::addClient(Client &client)
