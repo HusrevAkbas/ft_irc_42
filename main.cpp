@@ -6,6 +6,18 @@
 #define	BUFFER_SIZE	1000
 #define	MAX_READY_EVENTS	100
 
+bool	checkInvalidChars(std::string &str)
+{
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (!std::isprint(str[i]))
+		return (true);
+	}
+	if (str.find_first_of("@:#+-") != std::string::npos)
+		return (true);
+	return (false);
+}
+
 bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 {
 	std::stringstream	ss;
@@ -37,9 +49,9 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	password = argv[2];
 	for (size_t i = 0; i < password.length(); i++)
 	{
-		if (!std::isprint(password[i]))
+		if (checkInvalidChars(password))
 		{
-			std::cerr << "Error: invalid password, only ascii printable characters are supported\n";
+			std::cerr << "Error: invalid password, only ascii printable characters  are supported and @,#,+,-,: are not allowed\n";
 			return (false);
 		}
 	}

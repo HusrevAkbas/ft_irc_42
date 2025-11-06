@@ -91,7 +91,5 @@ void    CapCommand::response(Client &client, Server &server)
         message = "There is no MOTD yet";
         response = Command::buildNumericReply(server, client, ERR_NOMOTD, message);
         server.sendResponse(client, response);
-        // 221 u_modeis
-        response = Command::buildNumericReplyNoColon(server, client, RPL_UMODEIS, "+i", "");
     }
 }
