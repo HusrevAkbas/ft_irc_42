@@ -116,3 +116,9 @@ ISSUES:
 	9- Invite/invitelist will be reworked - Ildoko(INVITE)/oksana(JOIN)
 
 	10- Set hostname and server in response hüsrev nick!host@server (SOLVED)
+
+	06.11.2025
+
+	11- invite didn't work
+	invite message has duplicate '#' char:
+	invites you ##lala.

@@ -72,7 +72,7 @@ void    CapCommand::response(Client &client, Server &server)
         //  003 created
         time_t  serverTime = server.getTimestamp();
         message = "This server was created ";
-        message += ctime(&serverTime);
+        message += std::ctime(&serverTime);
         response = Command::buildNumericReply(server,client, RPL_CREATED, message);
         server.sendResponse(client, response);
         //  004 myinfo

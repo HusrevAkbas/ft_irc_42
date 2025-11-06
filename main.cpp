@@ -37,7 +37,7 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	password = argv[2];
 	for (size_t i = 0; i < password.length(); i++)
 	{
-		if (!isprint(password[i]))
+		if (!std::isprint(password[i]))
 		{
 			std::cerr << "Error: invalid password, only ascii printable characters are supported\n";
 			return (false);

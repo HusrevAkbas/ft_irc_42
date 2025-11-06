@@ -19,7 +19,7 @@ Server::~Server()
 Server::Server(int fd, int epollFd, std::string name, std::string pass, sockaddr_in addr)
 : _fd(fd), _epoll_fd(epollFd), _name(name), _password(pass), _sockaddr(addr)
 {
-	this->_timestamp = time(NULL);
+	this->_timestamp = std::time(NULL);
 }
 
 Server::Server(const Server &other) : _fd(other._fd), _epoll_fd(other._epoll_fd), _name(other._name), _password(other._password)
@@ -297,7 +297,7 @@ std::ostream&	operator<<(std::ostream& o, Server &server)
 	<< "Password: " << server.getPass() << "\n"
 	<< "Ip: " << inet_ntoa(server.getAddr().sin_addr) << "\n"
 	<< "Port: " << ntohs(server.getAddr().sin_port) << "\n"
-	<< "Created at: " << ctime(&time)
+	<< "Created at: " << std::ctime(&time)
 	<< "Number of Clients: " << server.getClients().size() << "\n";
 	for (size_t i = 0; i < server.getClients().size(); i++)
 	{
