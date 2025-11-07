@@ -42,12 +42,19 @@ void    CapCommand::response(Client &client, Server &server)
     }
     if (this->subcommand == "END")
     {
+        Client  *found = server.findClientByNick(client.getNickname());
+        if (found != &client)
+        {
+            response = "ERROR :Nickname is already in use\r\n";
+            server.sendResponse(client, response);
+            server.removeClient(&client);
+            return ; // throw std::invalid_argument("Nickname is in use");
+        }
         if (server.getPass() != client.getPassword())
         {
             response = buildNumericReply(server, client, ERR_PASSWDMISMATCH, "Wrong password mate!");
             server.sendResponse(client, response);
-            sleep(1); // TODO wait enough until client gets the response
-            server.removeClient(&client); //TO-DO***
+            server.removeClient(&client);
             return ;
         }
         client.setConnected(1);
@@ -65,7 +72,7 @@ void    CapCommand::response(Client &client, Server &server)
         //  003 created
         time_t  serverTime = server.getTimestamp();
         message = "This server was created ";
-        message += ctime(&serverTime);
+        message += std::ctime(&serverTime);
         response = Command::buildNumericReply(server,client, RPL_CREATED, message);
         server.sendResponse(client, response);
         //  004 myinfo
@@ -84,7 +91,5 @@ void    CapCommand::response(Client &client, Server &server)
         message = "There is no MOTD yet";
         response = Command::buildNumericReply(server, client, ERR_NOMOTD, message);
         server.sendResponse(client, response);
-        // 221 u_modeis
-        response = Command::buildNumericReplyNoColon(server, client, RPL_UMODEIS, "+i", "");
     }
 }

@@ -64,6 +64,10 @@ std::string Command::buildClientMessage(Client &client,
 {
     std::string response = ":";
     response += client.getNickname();
+    response += "!";
+    response += client.getHostname();
+    response += "@";
+    response += client.getNetworkname();
     response += " ";
     response += command;
     if (!params.empty())

@@ -26,40 +26,38 @@ std::string NickCommand::getNickname() const {
 void NickCommand::response(Client &client, Server &server)
 {
     std::string response;
-    std::string msg;
 
     // check if nickname exist
     if (this->nickname.empty())
     {
         if (!client.getConnected())
         {
-            server.removeClient(server.findClientByFd(client.getSocketFd()));
-            throw std::invalid_argument("No nickname given");
+            server.removeClient(&client);
+            return ; // throw std::invalid_argument("No nickname given");
         }
-        msg = "No nickname given";
-        response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, msg);
-    }
-    // if nickname is already in use send deny message, if not registered close connection
-    else if (server.findClientByNick(this->getNickname()))
-    {
-        msg = "Nickname is already in use";
-        response = Command::buildNumericReply(server, client, ERR_NICKNAMEINUSE, "Nickname is already in use");
-        send(client.getSocketFd(), response.c_str(), response.length(), 0);
-        sleep(2); //TODO find another way to wait until client receive msg
-        if (!client.getConnected())
-        {
-            server.removeClient(server.findClientByFd(client.getSocketFd()));
-            throw std::invalid_argument("Nickname is in use");
-        }
+        response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, "No nickname given");
+        server.sendResponse(client, response);
     }
     // set client nickname
     else
     {
-        if (!client.getNickname().empty())
+        if (!client.getConnected())
+            client.setNickname(this->nickname);
+        else if (server.findClientByNick(this->nickname))
         {
-            response.append(":").append(client.getNickname()). append(" NICK ").append(this->nickname).append("\r\n");
+            response = ":" + server.getName() + " " + toString(ERR_NICKNAMEINUSE) + " "
+            + client.getNickname() + " " + this->nickname + "\r\n";
             server.sendResponse(client, response);
         }
-        client.setNickname(this->nickname);
+        else
+        {
+            response =":" + client.getNickname() + " NICK " + this->nickname + "\r\n";
+            server.sendResponse(client, response);
+            for (size_t i = 0; i < client.getChannels().size(); i++)
+            {
+                server.broadcast(client, response);
+            }
+            client.setNickname(this->nickname);
+        }
     }
 }
