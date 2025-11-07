@@ -154,7 +154,8 @@ void	Channel::addOperator(Client &client)
 }
 
 void	Channel::addInviteList(const std::string& newInvite) {
-	_inviteList.push_back(newInvite);
+	if (!isNickInInviteList(newInvite))
+		_inviteList.push_back(newInvite);
 }
 
 void	Channel::removeClient(Client &client)
