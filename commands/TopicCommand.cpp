@@ -94,7 +94,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     //change topic
     channel->setTopic(_topic);
     channel->setTopicSetterTimestamp(client.getNickname(), time(0));
-    std::string response = Command::buildNumericReplyNoColon(server, client, RPL_TOPIC, channel->getName(), channel->getTopic());
+    std::string response = Command::buildNumericReply(server, client, RPL_TOPIC, channel->getName(), channel->getTopic());
     server.sendResponse(client, response);
     channel->broadcast(client, server, response);
 }
