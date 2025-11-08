@@ -60,7 +60,7 @@ Client* KickCommand::findClient(const std::string& client, Channel* channel) {
     std::vector<Client *>   clients = channel->getClients();
 
     for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
-        if ((*it)->getUsername() == client) {
+        if ((*it)->getNickname() == client) {
             return *it;
         }
     }
