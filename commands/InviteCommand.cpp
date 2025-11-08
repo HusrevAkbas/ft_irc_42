@@ -96,7 +96,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
 
     //check whether user is in channel by nickname
     Client* clientB = findUser(_nickname, channel);
-    if (!clientB) {
+    if (clientB) {
         //ERR_USERONCHANNEL (443)
         std::string err = ":" + server.getName() + " 443 " + client.getNickname() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
         server.sendResponse(client, err);
@@ -104,7 +104,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
     }
 
     //send invite to user
-    std::string response = ":" + server.getName() + " 341 " + client.getNickname() + " invites you to " + _channel + "\r\n";
+    std::string response = ":" + server.getName() + " 341 " + client.getNickname() + " " + _nickname + " " + _channel + "\r\n";
     server.sendResponse(*clientB, response);
 }
 
