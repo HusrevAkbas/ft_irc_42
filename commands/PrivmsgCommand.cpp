@@ -47,7 +47,7 @@ void PrivmsgCommand::response(Client &client, Server &server)
         else
         {
             response.append(":").append(client.getNickname()).append(" PRIVMSG ")
-                .append(this->target).append(" :").append(this->message).append("\n");
+                .append(this->target).append(" :").append(this->message).append("\r\n");
             chan->broadcast(client, server, response);
         }
     }
@@ -63,7 +63,7 @@ void PrivmsgCommand::response(Client &client, Server &server)
         else
         {
             response.append(":").append(client.getNickname()).append(" PRIVMSG ")
-                .append(this->target).append(" :").append(this->message).append("\n");
+                .append(this->target).append(" :").append(this->message).append("\r\n");
             server.sendResponse(*target, response);
         }
     }

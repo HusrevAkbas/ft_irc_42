@@ -119,6 +119,18 @@ ISSUES:
 
 	06.11.2025
 
-	11- invite didn't work
-	invite message has duplicate '#' char:
-	invites you ##lala.
+	11- INVITE sends wrong message to inviter. 
+
+	08.11.2025
+
+	12- check if nickname is empty in CAP END
+
+	13- channels must have # at first char. irssi adds automaticly but other programs might not.(476)
+
+	14- if the last channel operator leaves the channel and there are other clients, first client becomes operator. QUIT, PART or disconnection
+
+	15- implement NOTICE command
+
+	16- if the last user disconnects channel didn't deleted
+
+	17- MODE accepts only one mode change per command. +i, -o etc.
