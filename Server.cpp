@@ -12,12 +12,14 @@ Server::~Server()
 	}
 	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
 		delete *it;
+	close (this->_epoll_fd);
+	close(this->_fd);
 }
 
 Server::Server(int fd, int epollFd, std::string name, std::string pass, sockaddr_in addr)
 : _fd(fd), _epoll_fd(epollFd), _name(name), _password(pass), _sockaddr(addr)
 {
-	this->_timestamp = time(NULL);
+	this->_timestamp = std::time(NULL);
 }
 
 Server::Server(const Server &other) : _fd(other._fd), _epoll_fd(other._epoll_fd), _name(other._name), _password(other._password)
@@ -179,6 +181,12 @@ void	Server::removeClient(Client * client)
 	pos = this->findClientPos(client);
 	if (pos != this->_clients.end())
 	{
+		// leave from all channels
+		for (size_t i = 0; i < client->getChannels().size(); i++)
+		{
+			client->getChannels()[i]->removeClient(*client);
+			client->getChannels()[i]->removeOperator(*client);
+		}
 		close(client->getSocketFd());
 		delete (*pos);
 		this->_clients.erase(pos);
@@ -260,7 +268,7 @@ void	Server::handleRequest(std::string input, int fd)
 void Server::sendResponse(Client &client, const std::string& response)
 {
 	std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
-	send(client.getSocketFd(), response.c_str(), response.length(), 0);
+	send(client.getSocketFd(), response.c_str(), response.length(), MSG_NOSIGNAL);
 }
 
 void	Server::broadcast(Client &client, std::string response)
@@ -289,7 +297,7 @@ std::ostream&	operator<<(std::ostream& o, Server &server)
 	<< "Password: " << server.getPass() << "\n"
 	<< "Ip: " << inet_ntoa(server.getAddr().sin_addr) << "\n"
 	<< "Port: " << ntohs(server.getAddr().sin_port) << "\n"
-	<< "Created at: " << ctime(&time)
+	<< "Created at: " << std::ctime(&time)
 	<< "Number of Clients: " << server.getClients().size() << "\n";
 	for (size_t i = 0; i < server.getClients().size(); i++)
 	{

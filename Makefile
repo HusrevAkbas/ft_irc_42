@@ -35,7 +35,10 @@ fclean : clean
 re : fclean all
 
 #	port 6667 is standard for plain text, port 6697 is standard for TLS connections
-run : all clean
+run : all
 	@./$(NAME) 6667 SAFEME
+
+val : all
+	@valgrind --track-fds=all -s --leak-check=full --show-leak-kinds=possible ./$(NAME) 6667 SAFEME
 
 .phony : all c clean f fclean re run

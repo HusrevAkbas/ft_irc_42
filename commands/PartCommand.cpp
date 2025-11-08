@@ -94,5 +94,7 @@ std::string PartCommand::partSingleChannel(Server &server, Client &client,
 
     response = partMessage;
 
+    chan->broadcast(client, server, response);
+
     return response;
 }

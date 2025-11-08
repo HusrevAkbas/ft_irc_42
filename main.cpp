@@ -6,6 +6,18 @@
 #define	BUFFER_SIZE	1000
 #define	MAX_READY_EVENTS	100
 
+bool	checkInvalidChars(std::string &str)
+{
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (!std::isprint(str[i]))
+		return (true);
+	}
+	if (str.find_first_of("@:#+-") != std::string::npos)
+		return (true);
+	return (false);
+}
+
 bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 {
 	std::stringstream	ss;
@@ -37,9 +49,9 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	password = argv[2];
 	for (size_t i = 0; i < password.length(); i++)
 	{
-		if (!isprint(password[i]))
+		if (checkInvalidChars(password))
 		{
-			std::cerr << "Error: invalid password, only ascii printable characters are supported\n";
+			std::cerr << "Error: invalid password, only ascii printable characters  are supported and @,#,+,-,: are not allowed\n";
 			return (false);
 		}
 	}
@@ -69,6 +81,7 @@ int	main(int argc, char **argv)
 	if (setsockopt(server_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 	{
 		std::cerr << "Error: setsockopt " << opt << "\n";
+		close (server_socket_fd);
 		return (1);
 	}
 
@@ -99,6 +112,7 @@ int	main(int argc, char **argv)
 	if (epoll_fd == -1)
 	{
 		std::cerr << "Error: epoll_create1\n";
+		close (server_socket_fd);
 		return (1);
 	}
 
@@ -111,17 +125,17 @@ int	main(int argc, char **argv)
 	if (status == -1)
 	{
 		std::cerr << "Error: epoll_ctl, add, server fd\n";
+		close (server_socket_fd);
+		close (epoll_fd);
 		return (1);
 	}
 
 	Server	server(server_socket_fd, epoll_fd, SERVER_NAME, password, server_address);
-	// std::cout << "Server start on port " << ntohs(server.getAddr().sin_port)
-	// << "\nPassword(evaluation only): " << server.getPass() << "\n";
 	std::cout << server;
 
 	struct epoll_event	pending[MAX_READY_EVENTS];
-	char		buff[BUFFER_SIZE + 1];
-	std::string	input;
+	char				buff[BUFFER_SIZE + 1];
+	std::string			input;
 
 	while (!signal_shutdown)
 	{
@@ -211,7 +225,7 @@ int	main(int argc, char **argv)
 					input.append(buff, len);
 				}
 				// HANDLE EVENTS HERE
-				// data.fd is client's socket file descripter
+				// data.fd is client's socket file descriptor
 				server.handleRequest(input, pending[i].data.fd);
 				input = "";
 			}
