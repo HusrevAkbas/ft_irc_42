@@ -311,3 +311,42 @@ std::ostream&	operator<<(std::ostream& o, Server &server)
 	}
 	return (o);
 }
+
+void Server::finishClientRegistration(Client &client) {
+	std::string response;
+		//  send greet messages
+		//  001 welcome
+		std::string message = "Welcome to 42 network, ";
+		message += client.getNickname();
+		response = Command::buildNumericReply(*this, client, RPL_WELCOME, message);
+		sendResponse(client, response);
+		//  002 yourhost
+		message = "Your host is ";
+		message.append(getName()).append(", version 1.2.3");
+		response = Command::buildNumericReply(*this, client, RPL_YOURHOST, message);
+		sendResponse(client, response);
+		//  003 created
+		time_t  serverTime = getTimestamp();
+		message = "This server was created ";
+		message += std::ctime(&serverTime);
+		response = Command::buildNumericReply(*this, client, RPL_CREATED, message);
+		sendResponse(client, response);
+		//  004 myinfo
+		message = "";
+		message.append(getName()).append(" v-1.2.3");
+		response = Command::buildNumericReplyNoColon(*this, client, RPL_MYINFO, message, "");
+		sendResponse(client, response);
+		//  005 isupport
+		message = "CASEMAPPING=ascii CHANLIMIT=#:25 CHANMODES=,o,kl,it PREFIX=(ov)@+";
+		message += " CHANNELLEN=64 CHANTYPES=# HOSTLEN=64 KICKLEN=255 NETWORK=42 NICKLEN=30";
+		message += " STATUSMSG=@+ TOPICLEN=510 USERLEN=64 SAFELIST";
+		response = Command::buildNumericReply(*this, client, RPL_ISUPPORT, message, "are supported by this server");
+		sendResponse(client, response);
+		// a response as if client send LUSER
+		// MOTD message of the day
+		message = "There is no MOTD yet";
+		response = Command::buildNumericReply(*this, client, ERR_NOMOTD, message);
+		sendResponse(client, response);
+	
+		client.setRegistered(true);
+}

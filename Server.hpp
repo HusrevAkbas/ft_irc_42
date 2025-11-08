@@ -61,6 +61,8 @@ class Server
 		void	sendResponse(Client &client, const std::string& response);
 		void	broadcast(Client &client, std::string message);
 
+		void finishClientRegistration(Client &client);
+
 		class ClientLimitReachedException: public std::exception
 		{	const char *what () const throw ();	};
 		class ChannelLimitReachedException: public std::exception

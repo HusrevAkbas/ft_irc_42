@@ -42,7 +42,14 @@ void NickCommand::response(Client &client, Server &server)
     else
     {
         if (!client.getConnected())
+        {
             client.setNickname(this->nickname);
+
+            if (client.getCapEnded() && !client.getUsername().empty() && !client.getPassword().empty())
+            {
+                server.finishClientRegistration(client);
+            }
+        }
         else if (server.findClientByNick(this->nickname))
         {
             response = ":" + server.getName() + " " + toString(ERR_NICKNAMEINUSE) + " "

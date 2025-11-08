@@ -49,14 +49,20 @@ void UserCommand::response(Client &client, Server &server)
 {
     std::string response;
 
-    if (client.getConnected())
+    if (client.getRegistered())
     {
         response = Command::buildNumericReply(server, client, ERR_ALREADYREGISTERED, "You are already registered");
         server.sendResponse(client, response);
         return ;
     }
+
     client.setUsername(this->username);
     client.setHostname(this->hostname);
     client.setNetworkname(this->servername);
     client.setRealname(this->realname);
+
+    if (!client.getNickname().empty() && client.getCapEnded() && !client.getPassword().empty())
+    {
+        server.finishClientRegistration(client);
+    }
 }

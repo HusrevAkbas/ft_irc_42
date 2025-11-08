@@ -10,6 +10,17 @@ class Command {
 protected:
     std::string type;
 
+public:
+    Command();
+    Command(const std::string& cmdType);
+    Command(const Command& other);
+    Command& operator=(const Command& other);
+    virtual ~Command();
+
+    std::string getType() const;
+    virtual void response(Client &client, Server &server);
+
+
     static std::string buildNumericReply(Server &server, Client &client,
                                          IrcReply replyCode,
                                          const std::string& message);
@@ -31,16 +42,6 @@ protected:
                                                  IrcReply replyCode,
                                                  const std::string& target,
                                                  const std::string& param);
-
-public:
-    Command();
-    Command(const std::string& cmdType);
-    Command(const Command& other);
-    Command& operator=(const Command& other);
-    virtual ~Command();
-
-    std::string getType() const;
-    virtual void response(Client &client, Server &server);
 };
 
 

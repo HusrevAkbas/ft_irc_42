@@ -1,12 +1,12 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-Client::Client() : _socketFd(-1), _connected(0), _invisibleMode(false)
+Client::Client() : _socketFd(-1), _connected(0), _invisibleMode(false), _capEnded(false), _registered(false)
 {
 	this->_timestamp = std::time(0);
 }
 
-Client::Client(int fd) : _socketFd(fd), _connected(0), _invisibleMode(false)
+Client::Client(int fd) : _socketFd(fd), _connected(0), _invisibleMode(false), _capEnded(false), _registered(false)
 {
 	this->_timestamp = std::time(0);
 }
@@ -38,6 +38,8 @@ Client&	Client::operator=(const Client &other)
 	this->_channelLimit = other._channelLimit;
 	this->_timestamp = other._timestamp;
 	this->_invisibleMode = other._invisibleMode;
+	this->_capEnded = other._capEnded;
+	this->_registered = other._registered;
 	return (*this);
 }
 
@@ -96,6 +98,14 @@ std::string	Client::getUserModes() const {
 	return modes;
 }
 
+bool Client::getCapEnded() const {
+	return _capEnded;
+}
+
+bool Client::getRegistered() const {
+	return _registered;
+}
+
 
 //SETTERS
 
@@ -150,6 +160,14 @@ void	Client::setTimestamp(time_t time) {
 
 void	Client::setInvisibleMode(bool invisible) {
 	_invisibleMode = invisible;
+}
+
+void	Client::setCapEnded(bool ended) {
+	_capEnded = ended;
+}
+
+void Client::setRegistered(bool registered) {
+	_registered = registered;
 }
 
 

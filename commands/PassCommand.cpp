@@ -27,7 +27,7 @@ void PassCommand::response(Client &client, Server &server)
 {
     std::string response;
 
-    if (client.getConnected())
+    if (client.getRegistered())
     {
         response = Command::buildNumericReply(server, client, ERR_ALREADYREGISTERED, "You are already registered");
         server.sendResponse(client, response);
@@ -39,7 +39,14 @@ void PassCommand::response(Client &client, Server &server)
     }
     else
     {
-        // Password check in CAP END part
-        client.setPassword(this->password);
+        if (server.getPass() != this->password)
+		{
+            response = buildNumericReply(server, client, ERR_PASSWDMISMATCH, "Wrong password mate!");
+            server.sendResponse(client, response);
+            server.removeClient(&client);
+            return ;
+		} else {
+            client.setPassword(this->password);
+        }
     }
 }
