@@ -30,6 +30,7 @@ void PassCommand::response(Client &client, Server &server)
     if (client.getConnected())
     {
         response = Command::buildNumericReply(server, client, ERR_ALREADYREGISTERED, "You are already registered");
+        server.sendResponse(client, response);
     }
     else if (this->password.empty())
     {

@@ -276,7 +276,7 @@ void ModeCommand::response(Client &client, Server &server)
             // irssi sends 'MODE <channel> b', return empty list
             // response += buildNumericReply(server, client, RPL_ENDOFBANS, "", "End of Channel Ban list");
 
-            response += server.getName();
+            response += ":" + server.getName();
             response += " ";
             response += toString(RPL_ENDOFBANS);
             response += " ";
@@ -302,6 +302,8 @@ void ModeCommand::response(Client &client, Server &server)
         std::string params = targetName + " " + appliedModes + appliedParams;
         response = buildClientMessage(client, "MODE", params);
         server.sendResponse(client, response);
+        // notify all users about change of modes
+        chan->broadcast(client, server, response);
         return;
     }
 

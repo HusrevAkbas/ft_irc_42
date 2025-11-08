@@ -104,8 +104,11 @@ std::string JoinCommand::joinSingleChannel(Server &server, Client &client,
 
         if (chan->getInviteStatus())
         {
-            response = buildNumericReply(server, client, ERR_INVITEONLYCHAN, channelName, "Cannot join channel (+i)");
-            return response;
+            if (!chan->isNickInInviteList(client.getNickname()))
+            {
+                response = buildNumericReply(server, client, ERR_INVITEONLYCHAN, channelName, "Cannot join channel (+i)");
+                return response;
+            }
         }
 
         if (chan->getUserLimit() > 0 &&
