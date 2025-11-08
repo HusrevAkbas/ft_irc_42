@@ -302,6 +302,8 @@ void ModeCommand::response(Client &client, Server &server)
         std::string params = targetName + " " + appliedModes + appliedParams;
         response = buildClientMessage(client, "MODE", params);
         server.sendResponse(client, response);
+        // notify all users about change of modes
+        chan->broadcast(client, server, response);
         return;
     }
 
