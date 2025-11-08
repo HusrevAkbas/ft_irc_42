@@ -164,7 +164,11 @@ void	Channel::removeClient(Client &client)
 	{
 		if (*it == &client)
 		{
+			if (isOperator(client))
+				removeOperator(client);
 			this->_clients.erase(it);
+			if (this->getOperators().size() == 0 && this->_clients.size() > 0)
+				addOperator(*this->_clients[0]);
 			return;
 		}
 	}

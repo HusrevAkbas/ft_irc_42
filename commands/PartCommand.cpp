@@ -79,17 +79,18 @@ std::string PartCommand::partSingleChannel(Server &server, Client &client,
 
     chan->removeClient(client);
 
-    if (chan->isOperator(client))
-    {
-        chan->removeOperator(client);
-    }
+    // it is handled in Channel::removeClient
+    // if (chan->isOperator(client))
+    // {
+    //     chan->removeOperator(client);
+    // }
 
     client.removeChannel(chan);
 
     if (chan->getClients().empty())
     {
         server.removeChannel(chan);
-        return ;
+        return ""; // TODO check if you need a response to return
     }
 
     response = partMessage;
