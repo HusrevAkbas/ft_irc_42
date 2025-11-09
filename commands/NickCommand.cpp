@@ -30,11 +30,6 @@ void NickCommand::response(Client &client, Server &server)
     // check if nickname exist
     if (this->nickname.empty())
     {
-        if (!client.getConnected())
-        {
-            server.removeClient(&client);
-            return ; // throw std::invalid_argument("No nickname given");
-        }
         response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, "No nickname given");
         server.sendResponse(client, response);
     }
