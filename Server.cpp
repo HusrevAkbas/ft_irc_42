@@ -185,7 +185,8 @@ void	Server::removeClient(Client * client)
 		for (size_t i = 0; i < client->getChannels().size(); i++)
 		{
 			client->getChannels()[i]->removeClient(*client);
-			client->getChannels()[i]->removeOperator(*client);
+			if (client->getChannels()[i]->getClients().size() == 0)
+				this->removeChannel(client->getChannels()[i]);
 		}
 		close(client->getSocketFd());
 		delete (*pos);
