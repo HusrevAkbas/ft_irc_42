@@ -1,4 +1,5 @@
 #include "CapCommand.hpp"
+#include "CapMOTD.hpp"
 
 CapCommand::CapCommand() : Command("CAP") {}
 
@@ -90,8 +91,17 @@ void    CapCommand::response(Client &client, Server &server)
         server.sendResponse(client, response);
         // a response as if client send LUSER
         // MOTD message of the day
-        message = "There is no MOTD yet";
-        response = Command::buildNumericReply(server, client, ERR_NOMOTD, message);
+        message = "--- Message of the day from " + server.getName() + " ---";
+        response = buildNumericReply(server, client, RPL_MOTDSTART, message);
+        server.sendResponse(client, response);
+        std::stringstream   ss(motd);
+        while (std::getline(ss, message))
+        {
+            response = buildNumericReply(server, client, RPL_MOTD, message);
+            server.sendResponse(client, response);
+        }
+        message = "End of /MOTD";
+        response = Command::buildNumericReply(server, client, RPL_ENDOFMOTD, message);
         server.sendResponse(client, response);
     }
 }

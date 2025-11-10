@@ -8,7 +8,7 @@
 
 #define	MAX_CLIENTS		1000
 #define	MAX_CHANNELS	100
-#define SERVER_NAME		"ircserv42"
+#define SERVER_NAME		"ircserv"
 
 /*
 	NOTES:
