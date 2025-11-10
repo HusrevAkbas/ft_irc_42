@@ -90,7 +90,7 @@ std::string PartCommand::partSingleChannel(Server &server, Client &client,
     if (chan->getClients().empty())
     {
         server.removeChannel(chan);
-        return ""; // TODO check if you need a response to return
+        return partMessage;
     }
 
     response = partMessage;
