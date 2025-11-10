@@ -21,5 +21,6 @@
 #define	GREEN	"\e[3;32m"
 #define	YELLOW	"\e[3;33m"
 #define	RESET	"\e[0m"
+#define	DEBUG	1
 
 bool	checkInvalidChars(std::string &str);

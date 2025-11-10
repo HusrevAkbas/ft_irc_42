@@ -218,8 +218,8 @@ void	Server::handleRequest(std::string input, int fd)
 	while (std::getline(ss, request))
 	{
 		request += "\n";
-		// TODO: output for development, testing and debugging, REMOVE after project is ready
-		std::cout << GREEN << "---REQUEST---: " << RESET << request;
+		if (DEBUG)
+			std::cout << GREEN << "---REQUEST---: " << RESET << request;
 
 		Client *client = findClientByFd(fd);
 		if (client == NULL)
@@ -262,16 +262,16 @@ void	Server::handleRequest(std::string input, int fd)
 		}
 		catch (std::exception &e)
 		{
-			// TODO: output for development, testing and debugging, REMOVE after project is ready
-			std::cerr << "Unexpected exception in Server::handleRequest:\n"
-						<< e.what() << "\n";
+			if (DEBUG)
+				std::cerr << "Unexpected exception in Server::handleRequest:\n" << e.what() << "\n";
 		}
 	}
 }
 
 void Server::sendResponse(Client &client, const std::string& response)
 {
-	std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
+	if (DEBUG)
+		std::cout << YELLOW << "---RESPONSE---: " << RESET << response;
 	send(client.getSocketFd(), response.c_str(), response.length(), MSG_NOSIGNAL);
 }
 
