@@ -27,7 +27,6 @@ void QuitCommand::response(Client &client, Server &server)
 {
     std::string response;
     std::string message;
-
     
     for (size_t i = 0; i < client.getChannels().size(); i++)
     {

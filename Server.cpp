@@ -187,13 +187,9 @@ void	Server::removeClient(Client * client)
 			Channel *channel = client->getChannels()[i];
 
 			channel->removeClient(*client);
-			channel->removeOperator(*client);
 
 			if (channel->getClients().empty())
-			{
-				std::cout << "Removing empty channel after the last user disconnected: " << channel->getName() << std::endl;
 				removeChannel(channel);
-			}
 		}
 		close(client->getSocketFd());
 		delete (*pos);

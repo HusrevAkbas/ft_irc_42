@@ -40,6 +40,11 @@ void PassCommand::response(Client &client, Server &server)
     else
     {
         // Password check in CAP END part
+        if (server.getPass() != this->password)
+        {
+            response = Command::buildNumericReply(server, client, ERR_PASSWDMISMATCH, "ERROR: Wrong password mate!");
+            server.sendResponse(client, response);
+        }
         client.setPassword(this->password);
     }
 }
