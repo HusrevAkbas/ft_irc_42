@@ -4,6 +4,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "commands/Command.hpp"
+#include "commands/CommandParser.hpp"
 
 #define	MAX_CLIENTS		1000
 #define	MAX_CHANNELS	100
@@ -68,5 +69,3 @@ class Server
 };
 
 std::ostream&	operator<<(std::ostream& o, Server &server);
-
-Command* parseCommand(const std::string& input);

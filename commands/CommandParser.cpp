@@ -29,6 +29,16 @@ static char toUpperChar(char c)
     return std::toupper(static_cast<unsigned char>(c));
 }
 
+std::string normalizeChannelName(const std::string &name)
+{
+    if (name.empty())
+        return name;
+
+    if (name[0] != '#')
+        return "#" + name;
+    return name;
+}
+
 Command *parseCommand(const std::string &input)
 {
     std::istringstream iss(input.c_str());
@@ -71,7 +81,7 @@ Command *parseCommand(const std::string &input)
             throw MissingParametersException("KICK", "Not enough parameters");
         }
         std::string reason = params.size() > 2 ? params[2] : "";
-        return new KickCommand(params[0], params[1], reason);
+        return new KickCommand(normalizeChannelName(params[0]), params[1], reason);
     }
     else if (cmdType == "INVITE")
     {
@@ -80,7 +90,7 @@ Command *parseCommand(const std::string &input)
         {
             throw MissingParametersException("INVITE", "Not enough parameters");
         }
-        return new InviteCommand(params[0], params[1]);
+        return new InviteCommand(params[0], normalizeChannelName(params[1]));
     }
     else if (cmdType == "TOPIC")
     {
@@ -88,9 +98,11 @@ Command *parseCommand(const std::string &input)
         if (params.size() < 1)
         {
             throw MissingParametersException("TOPIC", "Not enough parameters");
+        } else if (params.size() > 2) {
+            throw MissingParametersException("TOPIC", "Too many parameters");
         }
-        std::string topic = params.size() > 1 ? params[1] : "";
-        return new TopicCommand(params[0], topic);
+        std::string topic = params.size() == 2 ? params[1] : "";
+        return new TopicCommand(normalizeChannelName(params[0]), topic);
     }
     else if (cmdType == "MODE")
     {
@@ -138,7 +150,7 @@ Command *parseCommand(const std::string &input)
         {
             if (!channel.empty())
             {
-                channels.push_back(channel);
+                channels.push_back(normalizeChannelName(channel));
             }
         }
 
@@ -188,7 +200,7 @@ Command *parseCommand(const std::string &input)
         {
             if (!channel.empty())
             {
-                channels.push_back(channel);
+                channels.push_back(normalizeChannelName(channel));
             }
         }
 
@@ -272,7 +284,7 @@ Command *parseCommand(const std::string &input)
             {
                 if (!channel.empty())
                 {
-                    channels.push_back(channel);
+                    channels.push_back(normalizeChannelName(channel));
                 }
             }
         }
