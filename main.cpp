@@ -47,6 +47,11 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	}
 	// check if password has only ascii printable characters
 	password = argv[2];
+	if (password.empty())
+	{
+		std::cerr << "Error: empty password\n";
+		return (false);
+	}
 	for (size_t i = 0; i < password.length(); i++)
 	{
 		if (checkInvalidChars(password))
