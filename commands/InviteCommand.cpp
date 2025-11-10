@@ -119,8 +119,12 @@ void    InviteCommand::execute(Server& server, Client& client) {
     // }
 
     //send invite to user
+    //RPL_INVITING (341)
     std::string response = ":" + server.getName() + " 341 " + client.getNickname() + " " + _nickname + " " + _channel + "\r\n";
-    server.sendResponse(*target, response);
+    server.sendResponse(client, response);
+
+    response = ":" + server.getName() + " 341 " + client.getNickname() + " INVITE " + _nickname + " " + _channel + "\r\n";
+    server.sendResponse(*target, response); 
 }
 
 void InviteCommand::response(Client &client, Server &server)
