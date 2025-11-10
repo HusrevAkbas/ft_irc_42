@@ -47,16 +47,16 @@ bool    InviteCommand::checkParams(Server& server, Client& client) {
     return true;
 }
 
-Client* InviteCommand::findUser(const std::string& nickname, Channel* channel) {
-    std::vector<Client *>   clients = channel->getClients();
+// Client* InviteCommand::findUser(const std::string& nickname, Channel* channel) {
+//     std::vector<Client *>   clients = channel->getClients();
 
-    for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
-        if ((*it)->getNickname() == nickname) {
-            return *it;
-        }
-    }
-    return NULL;
-}
+//     for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
+//         if ((*it)->getNickname() == nickname) {
+//             return *it;
+//         }
+//     }
+//     return NULL;
+// }
 
 void    InviteCommand::execute(Server& server, Client& client) {
     //check command parameters
@@ -74,7 +74,8 @@ void    InviteCommand::execute(Server& server, Client& client) {
     }
 
     //check whether target exists
-    if (!server.findClientByNick(_nickname)){
+    Client* target = server.findClientByNick(_nickname);
+    if (!target){
         //ERR_NOSUCHNICK (401)
         std::string err = ":" + server.getName() + " 401 " + client.getNickname() + " " + _nickname + " :No such nick\r\n";
         server.sendResponse(client, err);
@@ -103,13 +104,19 @@ void    InviteCommand::execute(Server& server, Client& client) {
     }
 
     //check whether user is in channel by nickname
-    Client* clientB = findUser(_nickname, channel);
-    if (clientB) {
+    if (channel->isClientInChannel(*target)) {
         //ERR_USERONCHANNEL (443)
         std::string err = ":" + server.getName() + " 443 " + client.getNickname() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
         server.sendResponse(client, err);
         return;
     }
+    // Client* clientB = findUser(_nickname, channel);
+    // if (clientB) {
+    //     //ERR_USERONCHANNEL (443)
+    //     std::string err = ":" + server.getName() + " 443 " + client.getNickname() + " " + _nickname + " " + _channel + " :is already on channel\r\n";
+    //     server.sendResponse(client, err);
+    //     return;
+    // }
 
     //send invite to user
     std::string response = ":" + server.getName() + " 341 " + client.getNickname() + " " + _nickname + " " + _channel + "\r\n";
