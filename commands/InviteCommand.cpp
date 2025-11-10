@@ -73,6 +73,14 @@ void    InviteCommand::execute(Server& server, Client& client) {
         return;
     }
 
+    //check whether target exists
+    if (!server.findClientByNick(_nickname)){
+        //ERR_NOSUCHNICK (401)
+        std::string err = ":" + server.getName() + " 401 " + client.getNickname() + " " + _nickname + " :No such nick\r\n";
+        server.sendResponse(client, err);
+        return ;
+    }
+
     //check whether channel is invite-only
     if (channel->getInviteStatus()) {
         //check whether user is operator
