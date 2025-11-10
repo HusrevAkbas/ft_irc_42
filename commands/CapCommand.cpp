@@ -85,8 +85,7 @@ void    CapCommand::response(Client &client, Server &server)
         server.sendResponse(client, response);
         //  005 isupport
         message = "CASEMAPPING=ascii CHANLIMIT=#:25 CHANMODES=,o,kl,it PREFIX=(ov)@+";
-        message += " CHANNELLEN=64 CHANTYPES=# HOSTLEN=64 KICKLEN=255 NETWORK=42 NICKLEN=30";
-        message += " STATUSMSG=@+ TOPICLEN=510 USERLEN=64 SAFELIST";
+        message += " CHANTYPES=# NETWORK=42 STATUSMSG=@+ SAFELIST";
         response = Command::buildNumericReply(server, client, RPL_ISUPPORT, message, "are supported by this server");
         server.sendResponse(client, response);
         // a response as if client send LUSER
