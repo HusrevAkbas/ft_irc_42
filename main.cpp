@@ -26,7 +26,7 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	// argument count
 	if (argc != 3)
 	{
-		std::cerr << "Program takes exatly 3 arguments\n./ircserv [port] [password]\n";
+		std::cerr << "Program takes exactly 2 arguments\n./ircserv [port] [password]\n";
 		return (false);
 	}
 
@@ -39,10 +39,10 @@ bool	isArgValid(int argc, char** argv, std::string &password, int &port)
 	}
 	ss.str(str_port);
 	ss >> port;
-	if (port < 0 || port > 65535)
+	if (port < 1 || port > 65535)
 	{
-		std::cerr << "Error: invalid port number.\n"
-		<<"\t- Port variable uses unsigned short int (2 bytes).\n\t- Usable range is [0 - 65535]\n";
+		std::cerr << "Error: invalid port \n"
+		<<"\t- Port variable uses unsigned short int (2 bytes).\n\t- Usable range is [1 - 65535]\n";
 		return (false);
 	}
 	// check if password has only ascii printable characters
