@@ -33,6 +33,14 @@ void NickCommand::response(Client &client, Server &server)
         response = Command::buildNumericReply(server, client, ERR_NONICKNAMEGIVEN, "No nickname given");
         server.sendResponse(client, response);
     }
+    // check for invalid chars
+    else if (checkInvalidChars(this->nickname))
+    {
+        client.setNickname(this->nickname);
+        response = Command::buildNumericReply(server, client, ERR_ERRONEUSNICKNAME, "Erroneus nickname");
+        server.sendResponse(client, response);
+        client.setNickname("");
+    }
     // set client nickname
     else
     {

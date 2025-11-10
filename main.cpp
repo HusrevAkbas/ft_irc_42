@@ -13,7 +13,7 @@ bool	checkInvalidChars(std::string &str)
 		if (!std::isprint(str[i]))
 		return (true);
 	}
-	if (str.find_first_of("@:#+-") != std::string::npos)
+	if (str.find_first_of("@:#+- ") != std::string::npos)
 		return (true);
 	return (false);
 }
@@ -152,8 +152,6 @@ int	main(int argc, char **argv)
 				if (signal_shutdown) break;
 			}
 			continue;
-			// std::cerr << "Error: epoll_wait\n";
-			// return (1);
 		}
 
 		// loop through events which have input
@@ -168,11 +166,7 @@ int	main(int argc, char **argv)
 
 				// check if client limit reached
 				if (server.getClients().size() == MAX_CLIENTS)
-				{
-					// send deny response if there is,
-					// or just ignore
 					continue ;
-				}
 
 				// accept connection
 				int client_fd = accept(server_socket_fd, (sockaddr *) &socket_addr, &socket_len);
@@ -197,11 +191,11 @@ int	main(int argc, char **argv)
 				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_event) == -1)
 				{
 					std::cerr << "Error epoll_ctl, client\n";
+					close (client_fd);
 					continue ;
 				}
 
 				Client	*client = new Client(client_fd);
-				client->setConnected(0); // can be set as default
 				server.addClient(client);
 			}
 			else if (pending[i].events & EPOLLIN)
@@ -220,8 +214,6 @@ int	main(int argc, char **argv)
 						//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 						server.removeClient(server.findClientByFd(pending[i].data.fd));
-						// removeClient also close fd
-						// close(pending[i].data.fd);
 						continue ;
 					}
 					if (len == -1)
@@ -240,8 +232,6 @@ int	main(int argc, char **argv)
 				//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 				server.removeClient(server.findClientByFd(pending[i].data.fd));
-				// removeClient also close fd
-				// close(pending[i].data.fd);
 			}
 		}
 	}
