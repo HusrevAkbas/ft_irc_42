@@ -17,6 +17,7 @@
 #include "WhoisCommand.hpp"
 #include "LusersCommand.hpp"
 #include "ListCommand.hpp"
+#include "NoticeCommand.hpp"
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -289,6 +290,17 @@ Command *parseCommand(const std::string &input)
             }
         }
         return new ListCommand(channels);
+    }
+    else if (cmdType == "NOTICE")
+    {
+        // NOTICE <target> <text to be sent>
+        if (params.size() < 2)
+        {
+            throw MissingParametersException("WHO", "Not enough parameters");
+        }
+        std::string target = params[0];
+        std::string message = params[1];
+        return new NoticeCommand(target, message);
     }
     else
     {

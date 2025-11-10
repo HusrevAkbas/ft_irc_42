@@ -32,8 +32,6 @@ void PrivmsgCommand::response(Client &client, Server &server)
 {
     std::string response;
 
-    // if there is a prefix '@' means only operators get the message
-
     // if target is channel
     if (this->getTarget()[0] == '#')
     {
