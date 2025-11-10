@@ -120,7 +120,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
 
     //send invite to user
     std::string response = ":" + server.getName() + " 341 " + client.getNickname() + " " + _nickname + " " + _channel + "\r\n";
-    server.sendResponse(*clientB, response);
+    server.sendResponse(*target, response);
 }
 
 void InviteCommand::response(Client &client, Server &server)
