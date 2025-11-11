@@ -123,7 +123,7 @@ void    InviteCommand::execute(Server& server, Client& client) {
     std::string response = ":" + server.getName() + " 341 " + client.getNickname() + " " + _nickname + " " + _channel + "\r\n";
     server.sendResponse(client, response);
 
-    response = ":" + server.getName() + " 341 " + client.getNickname() + " INVITE " + _nickname + " " + _channel + "\r\n";
+    response = ":" + client.getNickname() + " INVITE " + _nickname + " " + _channel + "\r\n";
     server.sendResponse(*target, response); 
 }
 
