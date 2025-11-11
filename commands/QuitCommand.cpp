@@ -34,9 +34,6 @@ void QuitCommand::response(Client &client, Server &server)
         response = Command::buildClientMessage(client, "QUIT", message);
         client.getChannels()[i]->broadcast(client, server, response);
     }
-    message = ":Quit: " + this->getMessage();
-    response = buildClientMessage(client, "QUIT", message);
-    server.broadcast(client, response);
 
     server.removeClient(&client);
 }
