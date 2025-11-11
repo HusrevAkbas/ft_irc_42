@@ -36,7 +36,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     Channel* channel = server.findChannelByName(_channel);
     if (!channel) {
         //ERR_NOSUCHCHANNEL (403)
-        std::string err = ": " + server.getName() + " 403 " + client.getNickname() + " " + _channel + " :No such channel\r\n";
+        std::string err = ":" + server.getName() + " 403 " + client.getNickname() + " " + _channel + " :No such channel\r\n";
         server.sendResponse(client, err);
         return;
     }
@@ -44,7 +44,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     //check whether client is in channel
     if (!channel->isClientInChannel(client)) {
         //ERR_NOTONCHANNEL (442)
-        std::string err = ": " + server.getName() + " 442 " + client.getNickname() + " " + _channel + " :You're not on that channel\r\n";
+        std::string err = ":" + server.getName() + " 442 " + client.getNickname() + " " + _channel + " :You're not on that channel\r\n";
         server.sendResponse(client, err);
         return;
     }
@@ -55,16 +55,16 @@ void    TopicCommand::execute(Server& server, Client& client) {
         std::string topic = channel->getTopic();
         if (topic.empty()) {
             //RPL_NOTOPIC (331)
-            std::string response = ": " + server.getName() + " 331 " + client.getNickname() + " " + _channel + " :No topic is set\r\n";
+            std::string response = ":" + server.getName() + " 331 " + client.getNickname() + " " + _channel + " :No topic is set\r\n";
             server.sendResponse(client, response);
             return;
         } else {
             //RPL_TOPIC (332)
-            std::string response = ": " + server.getName() + " 332 " + client.getNickname() + " " + _channel + " :<" + topic + ">\r\n";
+            std::string response = ":" + server.getName() + " 332 " + client.getNickname() + " " + _channel + " :<" + topic + ">\r\n";
             server.sendResponse(client, response);
             //RPL_TOPICWHOTIME (333) 
             std::pair<std::string, time_t>  st = channel->getTopicSetterTimestamp();
-            response = ": " + server.getName() + " 333 " + client.getNickname() + " " + _channel + " " + st.first + " " + ctime(&st.second) + "\r\n";
+            response = ":" + server.getName() + " 333 " + client.getNickname() + " " + _channel + " " + st.first + " " + std::ctime(&st.second) + "\r\n";
             server.sendResponse(client, response);
             return;
         }
@@ -77,7 +77,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
         //check client is operator
         if (!channel->isOperator(client)) {
             //ERR_CHANOPRIVSNEEDED (482)
-            std::string err = ": " + server.getName() + " 482 " + client.getNickname() + " " + _channel + " :You're not channel operator\r\n";
+            std::string err = ":" + server.getName() + " 482 " + client.getNickname() + " " + _channel + " :You're not channel operator\r\n";
             server.sendResponse(client, err);
             return;
         }
@@ -87,7 +87,7 @@ void    TopicCommand::execute(Server& server, Client& client) {
     if (_topic == "") {
         channel->setTopic(_topic);
         channel->setTopicSetterTimestamp(client.getNickname(), time(0));
-        std::string response = ": " + server.getName() + " 332 " + client.getNickname() + " " + _channel + " :< >\r\n";
+        std::string response = ":" + server.getName() + " 332 " + client.getNickname() + " " + _channel + " :< >\r\n";
         server.sendResponse(client, response);
     }
 

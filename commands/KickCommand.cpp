@@ -100,7 +100,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     Channel* channel = server.findChannelByName(_channel);
     if (!channel) {
 //      ERR_NOSUCHCHANNEL (403)
-        std::string err = ": " + server.getName() + " 403 " + client.getNickname() + " " + _channel + " :No such channel\r\n";
+        std::string err = ":" + server.getName() + " 403 " + client.getNickname() + " " + _channel + " :No such channel\r\n";
         server.sendResponse(client, err);
         return; 
     }
@@ -108,7 +108,7 @@ void    KickCommand::execute(Server& server, Client& client) {
 	//check whether sender is in channel
 	if (!channel->isClientInChannel(client)) {
 // 		ERR_NOTONCHANNEL (442)
-		std::string err = ": " + server.getName() + " 442 " + client.getNickname() + " " + _channel + " :You're not on that channel\r\n";
+		std::string err = ":" + server.getName() + " 442 " + client.getNickname() + " " + _channel + " :You're not on that channel\r\n";
         server.sendResponse(client, err);
         return;
 	}
@@ -116,7 +116,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     //check whether sender is operator
     if (!channel->isOperator(client)) {
 //      ERR_CHANOPRIVSNEEDED (482)
-        std::string err = ": " + server.getName() + " 482 " + client.getNickname() + " " + _channel + " :You're not channel operator\r\n";
+        std::string err = ":" + server.getName() + " 482 " + client.getNickname() + " " + _channel + " :You're not channel operator\r\n";
         server.sendResponse(client, err);
         return;
     }
@@ -125,7 +125,7 @@ void    KickCommand::execute(Server& server, Client& client) {
     Client* target = findClient(_target, channel);
     if (!target) {
 //      ERR_USERNOTINCHANNEL (441)
-        std::string err = ": " + server.getName() + " 441 " + client.getNickname() + " " + _target + " " + _channel + " :They aren't on that channel\r\n";
+        std::string err = ":" + server.getName() + " 441 " + client.getNickname() + " " + _target + " " + _channel + " :They aren't on that channel\r\n";
         server.sendResponse(client, err);
         return;
     }
