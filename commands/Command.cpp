@@ -113,14 +113,3 @@ std::string Command::buildNumericReplyNoColon(Server &server, Client &client,
     response += "\r\n";
     return response;
 }
-
-/* 
-    Every derived class handles in its own way to response
-    TODO: this is default for all classes. After implementing all overload functions in derived classes, make this function pure and remove implementation from base class
-*/
-void    Command::response(Client &client, Server &server)
-{
-    (void) client;
-    (void) server;
-    std::cout << YELLOW << "Command: " << RESET << this->type << "\n";
-}

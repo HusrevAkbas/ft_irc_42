@@ -19,18 +19,13 @@ class Channel
 		bool		_t_topicSetable;
 		bool		_k_usePassword;
 		int			_l_userLimit;
-		time_t		_timestamp;
+
 	public:
 		Channel();
 		Channel(const std::string &name);
 		~Channel();
 		Channel(const Channel &other);
 		Channel& operator=(const Channel &other);
-		//	void	_o_givePrivilege(const Client &operator, const Client *target);
-		//	void	_o_takePrivilege(const Client &operator, const Client *target);
-
-		static int			totalChannelCount;
-		static const int	totalChannelLimit;
 
 		std::string	getName() const;
 		std::string	getPass() const;

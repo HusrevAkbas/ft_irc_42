@@ -40,7 +40,7 @@ public:
     virtual ~Command();
 
     std::string getType() const;
-    virtual void response(Client &client, Server &server);
+    virtual void response(Client &client, Server &server) = 0;
 };
 
 
