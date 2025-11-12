@@ -36,7 +36,7 @@ void JoinCommand::response(Client &client, Server &server)
 {
     std::string response;
 
-    if (channels.size() == 1 && channels[0] == "0")
+    if (channels.size() == 1 && channels[0] == "#0")
     {
         std::vector<Channel *> clientChannels = client.getChannels();
         for (size_t i = 0; i < clientChannels.size(); i++)
