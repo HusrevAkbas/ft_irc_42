@@ -90,6 +90,7 @@ void    CapCommand::response(Client &client, Server &server)
         response = Command::buildNumericReply(server, client, RPL_ISUPPORT, message, "are supported by this server");
         server.sendResponse(client, response);
         // a response as if client send LUSER
+        server.handleRequest("LUSERS", client.getSocketFd());
         // MOTD message of the day
         message = "--- Message of the day from " + server.getName() + " ---";
         response = buildNumericReply(server, client, RPL_MOTDSTART, message);
