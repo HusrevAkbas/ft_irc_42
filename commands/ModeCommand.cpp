@@ -107,7 +107,6 @@ void ModeCommand::response(Client &client, Server &server)
             return;
         }
 
-        bool adding = true;
         std::string appliedModes = "";
 
         for (size_t i = 0; i < modes.length(); i++)
@@ -116,20 +115,13 @@ void ModeCommand::response(Client &client, Server &server)
 
             if (modeChar == '+')
             {
-                adding = true;
                 if (appliedModes.empty() || appliedModes[appliedModes.length() - 1] != '+')
                     appliedModes += "+";
             }
             else if (modeChar == '-')
             {
-                adding = false;
                 if (appliedModes.empty() || appliedModes[appliedModes.length() - 1] != '-')
                     appliedModes += "-";
-            }
-            else if (modeChar == 'i')
-            {
-                client.setInvisibleMode(adding);
-                appliedModes += "i";
             }
             else
             {

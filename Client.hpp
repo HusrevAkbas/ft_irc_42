@@ -19,7 +19,6 @@ class Client
 		int						_connected;
 		int						_channelLimit;
 		time_t					_timestamp;
-		bool					_invisibleMode;
 
 	public:
 		Client();
