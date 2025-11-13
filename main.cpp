@@ -210,7 +210,8 @@ int	main(int argc, char **argv)
 					len = recv(pending[i].data.fd, buff, BUFFER_SIZE, 0);
 					if (len == 0 || (len == -1 && errno != EAGAIN && errno != EWOULDBLOCK))
 					{
-						std::cout << "Disconnected fd: " << pending[i].data.fd << "\n";
+						if (DEBUG)
+							std::cout << "Disconnected fd: " << pending[i].data.fd << "\n";
 						//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 						server.removeClient(server.findClientByFd(pending[i].data.fd));
@@ -228,7 +229,8 @@ int	main(int argc, char **argv)
 			}
 			else
 			{
-				std::cout << "Disconnected ANOTHER EVENT: " << pending[i].data.fd << "\n";
+				if (DEBUG)
+					std::cout << "Disconnected ANOTHER EVENT: " << pending[i].data.fd << "\n";
 				//	closing fd automaticly remove fd from interest list. using epoll_ctl wit DEL option is for clarity
 				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, pending[i].data.fd, NULL);
 				server.removeClient(server.findClientByFd(pending[i].data.fd));
