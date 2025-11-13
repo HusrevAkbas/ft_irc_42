@@ -40,6 +40,8 @@ void NoticeCommand::response(Client &client, Server &server)
             return ;
         else
         {
+            if (!chan->isClientInChannel(client))
+                return ;
             response.append(":").append(client.getNickname()).append(" NOTICE ")
                 .append(this->target).append(" :").append(this->message).append("\r\n");
             chan->broadcast(client, server, response);
