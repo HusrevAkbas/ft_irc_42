@@ -44,9 +44,17 @@ void PrivmsgCommand::response(Client &client, Server &server)
         }
         else
         {
-            response.append(":").append(client.getNickname()).append(" PRIVMSG ")
-                .append(this->target).append(" :").append(this->message).append("\r\n");
-            chan->broadcast(client, server, response);
+            if (!chan->isClientInChannel(client))
+            {
+                response = Command::buildNumericReply(server, client, ERR_CANNOTSENDTOCHAN, this->target, "Can not send to channel");
+                server.sendResponse(client, response);
+            }
+            else
+            {
+                response.append(":").append(client.getNickname()).append(" PRIVMSG ")
+                   .append(this->target).append(" :").append(this->message).append("\r\n");
+                chan->broadcast(client, server, response);
+            }
         }
     }
     // if target is user
