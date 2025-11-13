@@ -36,7 +36,7 @@ void ListCommand::response(Client &client, Server &server)
 	{
 		// list start
 		response = ":" + server.getName() + " " + toString(RPL_LISTSTART)
-		+ client.getNickname() + " Channel :Users Name\r\n";
+		+ client.getNickname() + " Channel :Channel Users Topic\r\n";
 		server.sendResponse(client, response);
 		// list
 		for (size_t i = 0; i < server.getChannels().size(); i++)
